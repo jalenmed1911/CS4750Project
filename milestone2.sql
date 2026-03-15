@@ -1,7 +1,7 @@
 CREATE TABLE User (
     userID INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
+    password VARCHAR(255) NOT NULL
     )
 
 CREATE TABLE Player (
@@ -82,14 +82,15 @@ CREATE TABLE Team(
     teamID INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     valuation_threshold INT NOT NULL,
-    description VARCHAR(255) NOT NULL,
+    description VARCHAR(255) NOT NULL
 )
 
 CREATE TABLE Offers(
-    coachID INT PRIMARY KEY,
-    playerID INT PRIMARY KEY,
+    coachID INT,
+    playerID INT,
     amount INT NOT NULL,
     status VARCHAR(255) NOT NULL CHECK (status IN ('pending', 'accepted', 'rejected')),
+    PRIMARY KEY (coachID, playerID)
     FOREIGN KEY (coachID) REFERENCES Coach(coachID),
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 )
