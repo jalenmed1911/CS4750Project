@@ -2,7 +2,14 @@ CREATE TABLE User (
     userID INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL
-    )
+);
+
+CREATE TABLE Team(
+    teamID INT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    valuation_threshold INT NOT NULL,
+    description VARCHAR(255) NOT NULL
+);
 
 CREATE TABLE Player (
     playerID INT AUTO_INCREMENT PRIMARY KEY,
@@ -14,7 +21,7 @@ CREATE TABLE Player (
     teamID INT,
     FOREIGN KEY (userID) REFERENCES User(userID),
     FOREIGN KEY (teamID) REFERENCES Team(teamID)
-)
+);
 
 CREATE TABLE Running_Back(
     playerID INT PRIMARY KEY,
@@ -23,7 +30,7 @@ CREATE TABLE Running_Back(
     carries INT NOT NULL,
     yards FLOAT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
-)
+);
 
 CREATE TABLE Quarterback(
     playerID INT PRIMARY KEY,
@@ -32,7 +39,7 @@ CREATE TABLE Quarterback(
     touchdowns INT NOT NULL,
     interceptions INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
-)
+);
 
 CREATE TABLE Wide_Receiver(
     playerID INT PRIMARY KEY,
@@ -41,7 +48,7 @@ CREATE TABLE Wide_Receiver(
     touchdowns INT NOT NULL,
     yards_after_catch FLOAT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
-)
+);
 
 CREATE TABLE Linebacker(
     playerID INT PRIMARY KEY,
@@ -50,7 +57,7 @@ CREATE TABLE Linebacker(
     total_tackles INT NOT NULL,
     solo_tackles INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
-)
+);
 
 CREATE TABLE Safety(
     playerID INT PRIMARY KEY,
@@ -59,7 +66,7 @@ CREATE TABLE Safety(
     interceptions INT NOT NULL,
     passes_defended INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
-)
+);
 
 CREATE TABLE Kicker(
     playerID INT PRIMARY KEY,
@@ -68,7 +75,7 @@ CREATE TABLE Kicker(
     field_goals_made INT NOT NULL,
     points INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
-)
+);
 
 CREATE TABLE Coach(
     coachID INT AUTO_INCREMENT PRIMARY KEY,
@@ -76,23 +83,16 @@ CREATE TABLE Coach(
     name VARCHAR(255) NOT NULL,
     teamID INT,
     FOREIGN KEY (teamID) REFERENCES Team(teamID)
-)
-
-CREATE TABLE Team(
-    teamID INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL,
-    valuation_threshold INT NOT NULL,
-    description VARCHAR(255) NOT NULL
-)
+);
 
 CREATE TABLE Offers(
     coachID INT,
     playerID INT,
     amount INT NOT NULL,
     status VARCHAR(255) NOT NULL CHECK (status IN ('pending', 'accepted', 'rejected')),
-    PRIMARY KEY (coachID, playerID)
+    PRIMARY KEY (coachID, playerID),
     FOREIGN KEY (coachID) REFERENCES Coach(coachID),
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
-)
+);
 
---Add Data to db here, or in php, and then update it to make sure it matches how we need it to.
+-- Add Data to db here, or in php, and then update it to make sure it matches how we need it to.
