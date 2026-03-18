@@ -2,7 +2,7 @@ import cfbd
 import json
 
 """
-A python script to scrape from collegefootballdata.com and save the data locally.
+A python script to scrape from collegefootballdata.com and save the data locally in json format.
 Uses the cfbd module available from github.
 """
 
