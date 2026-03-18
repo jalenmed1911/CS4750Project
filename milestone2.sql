@@ -92,7 +92,7 @@ CREATE TABLE Offers(
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
-CREATE TABLE User_Player(
+CREATE TABLE Plays_As(
     userID INT,
     playerID INT,
     PRIMARY KEY (userID, playerID),
@@ -100,7 +100,7 @@ CREATE TABLE User_Player(
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
-CREATE TABLE Player_Team(
+CREATE TABLE Plays_For(
     playerID INT,
     teamID INT,
     PRIMARY KEY (playerID, teamID),
