@@ -8,6 +8,12 @@ that will load the data into a database given the json source.
 position_names = {"QB": "Quarterback", "RB": "Running_Back", "WR": "Wide_Receiver",
                   "LB": "Linebacker", "S": "Safety", "PK": "Kicker"}
 
+stat_names = {"PCT": "percentage", "YDS": "yards", "TD": "touchdowns",
+                  "INT": "interceptions", "CAR": "carries", "LONG": "longest",
+                  "REC": "receptions", "SACKS": "sacks", "SOLO": "solo_tackles",
+                  "TOT": "total_tackles", "TFL": "tackles_for_loss", "PD": "passes_defended",
+                  "FGA": "fg_attempted", "FGM": "fg_made", "PTS": "points"}
+
 stats_map = {
     "QB": {"PCT": float, "YDS": int, "TD": int, "INT": int},
     "RB": {"YDS": int, "CAR": int, "TD": int, "LONG": int},
@@ -28,11 +34,12 @@ def main():
 
         for id, p in player_map.items():
             line = (
-                "INSERT INTO Player (playerID, name, position, hometown) "
+                "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) "
                 f"VALUES ({int(id)}, "
                 f"{sql_value(p.get('name'))}, "
                 f"{sql_value(p.get('position'))}, "
-                f"{sql_value(p.get('hometown'))});\n"
+                f"{sql_value(p.get('hometown'))}, "
+                "0, 0);\n"
             )
             
             f.write(line)
@@ -57,7 +64,7 @@ def get_sql_for_position(id, player_dict):
         elif dtype == float:
             stat_value = float(stat_value)
         stat_dict = {}
-        stat_dict["stat_type"] = stat_type.lower()
+        stat_dict["stat_type"] = stat_names[stat_type]
         stat_dict["stat_value"] = stat_value
         stats.append(stat_dict)
 
