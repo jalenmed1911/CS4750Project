@@ -7,18 +7,6 @@ Uses the cfbd module available from github.
 """
 
 
-params = {
-    "conference": "acc",
-    "year": 2025
-    # will also need to filter to our six positions: QB, RB, WR, LB, S, K
-}
-
-suburls = {
-    "players/usage", #for lists of all players on a given team: 'id', 'name', 'position'
-    "stats/player/season", #for lists of stats relating to players in the given season
-    "players/search" #for player 'hometown', use 'name' to search and 'id' to filter search results
-}
-
 # will be easiest to manually add coaches and teams (just need names and descriptions for each)
 
 allowed_positions = {"QB", "RB", "WR", "LB", "S", "K"}
@@ -47,7 +35,7 @@ configuration = cfbd.Configuration(
 
 # Configure Bearer authorization: apiKey
 configuration = cfbd.Configuration(
-    access_token = "Gl66ANUF8zNrf/3cvBMwigZ2xq88ZVkFdQCU8ak87tpS/yyjtag84JrIQFL06lqQ"
+    access_token = ""
 )
 
 
