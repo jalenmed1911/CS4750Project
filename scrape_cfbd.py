@@ -26,7 +26,7 @@ allowed_positions = {"QB", "RB", "WR", "LB", "S", "K"}
 # demarcate which of the many stats in cfbd we're using:
 selected_stats = {
     "QB": {("passing", "PCT"), ("passing", "YDS"), ("passing", "TD"), ("passing", "INT")},
-    "RB": {("rushing", "YDS"), ("rushing", "CAR"), ("rushing", "TD"), ("receiving", "REC")},
+    "RB": {("rushing", "YDS"), ("rushing", "CAR"), ("rushing", "TD"), ("rushing", "LONG")},
     "WR": {("receiving", "YDS"), ("receiving", "REC"), ("receiving", "TD"), ("receiving", "LONG")},
     "LB": {("defensive", "SACKS"), ("defensive", "SOLO"), ("defensive", "TOT"), ("defensive", "TFL")},
     "S": {("defensive", "SOLO"), ("defensive", "TOT"), ("defensive", "PD"), ("defensive", "INT")},
@@ -80,16 +80,12 @@ def main():
             })
         
         #now add hometown for each player
-
-
         for p in player_dicts:
             api_response = api_instance.search_players(p.get("name"))
             for response in api_response:
                 p["hometown"] = response.hometown
 
-        with open("filtered_players.json", "w") as f:
-            json.dump(player_dicts, f, indent=2)
-
+        #add stats
         api_instance = cfbd.StatsApi(api_client)
         api_response = api_instance.get_player_season_stats(2025, conference="acc")
 
@@ -97,7 +93,6 @@ def main():
 
         for player_stat in api_response:
             if player_stat.player_id in player_map.keys():
-                print(player_stat.stat_type)
                 position = player_map.get(player_stat.player_id, {}).get("position")
                 if is_selected_stat(position, player_stat):
                     player_dict = player_map.get(player_stat.player_id)
