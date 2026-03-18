@@ -12,8 +12,9 @@ CREATE TABLE Team(
 );
 
 CREATE TABLE Player (
-    playerID INT PRIMARY KEY, --use playerid from collegefootballdata
+    playerID INT PRIMARY KEY, --use ID from CFBD.com
     name VARCHAR(255) NOT NULL,
+    position VARCHAR(255) NOT NULL,
     hometown VARCHAR(255) NOT NULL,
     valuation INT NOT NULL,
     stars INT NOT NULL CHECK (stars >= 0 AND stars <= 5)
@@ -21,17 +22,17 @@ CREATE TABLE Player (
 
 CREATE TABLE Running_Back(
     playerID INT PRIMARY KEY,
-    long FLOAT NOT NULL,
+    long INT NOT NULL,
     td INT NOT NULL,
     car INT NOT NULL,
-    yds FLOAT NOT NULL,
+    yds INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
 CREATE TABLE Quarterback(
     playerID INT PRIMARY KEY,
-    yds FLOAT NOT NULL,
-    cmp FLOAT NOT NULL,
+    yds INT NOT NULL,
+    pct FLOAT NOT NULL,
     td INT NOT NULL,
     int INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
@@ -40,16 +41,16 @@ CREATE TABLE Quarterback(
 CREATE TABLE Wide_Receiver(
     playerID INT PRIMARY KEY,
     rec INT NOT NULL,
-    yds FLOAT NOT NULL,
+    yds INT NOT NULL,
     td INT NOT NULL,
-    long FLOAT NOT NULL,
+    long INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
 CREATE TABLE Linebacker(
     playerID INT PRIMARY KEY,
-    sacks INT NOT NULL,
-    tfl INT NOT NULL,
+    sacks FLOAT NOT NULL,
+    tfl FLOAT NOT NULL,
     tot INT NOT NULL,
     solo INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
