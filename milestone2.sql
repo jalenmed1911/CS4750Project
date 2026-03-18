@@ -12,68 +12,64 @@ CREATE TABLE Team(
 );
 
 CREATE TABLE Player (
-    playerID INT AUTO_INCREMENT PRIMARY KEY,
+    playerID INT PRIMARY KEY, --use playerid from collegefootballdata
     name VARCHAR(255) NOT NULL,
     hometown VARCHAR(255) NOT NULL,
     valuation INT NOT NULL,
-    stars INT NOT NULL CHECK (stars >= 0 AND stars <= 5),
-    userID INT,
-    teamID INT,
-    FOREIGN KEY (userID) REFERENCES User(userID),
-    FOREIGN KEY (teamID) REFERENCES Team(teamID)
+    stars INT NOT NULL CHECK (stars >= 0 AND stars <= 5)
 );
 
 CREATE TABLE Running_Back(
     playerID INT PRIMARY KEY,
-    receptions INT NOT NULL,
-    touchdowns INT NOT NULL,
-    carries INT NOT NULL,
-    yards FLOAT NOT NULL,
+    long FLOAT NOT NULL,
+    td INT NOT NULL,
+    car INT NOT NULL,
+    yds FLOAT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
 CREATE TABLE Quarterback(
     playerID INT PRIMARY KEY,
-    passing_yards FLOAT NOT NULL,
-    completion_rate FLOAT NOT NULL,
-    touchdowns INT NOT NULL,
-    interceptions INT NOT NULL,
+    yds FLOAT NOT NULL,
+    cmp FLOAT NOT NULL,
+    td INT NOT NULL,
+    int INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
 CREATE TABLE Wide_Receiver(
     playerID INT PRIMARY KEY,
-    receptions INT NOT NULL,
-    receiving_yards FLOAT NOT NULL,
-    touchdowns INT NOT NULL,
-    yards_after_catch FLOAT NOT NULL,
+    rec INT NOT NULL,
+    yds FLOAT NOT NULL,
+    td INT NOT NULL,
+    long FLOAT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
 CREATE TABLE Linebacker(
     playerID INT PRIMARY KEY,
     sacks INT NOT NULL,
-    tackles_for_loss INT NOT NULL,
-    total_tackles INT NOT NULL,
-    solo_tackles INT NOT NULL,
+    tfl INT NOT NULL,
+    tot INT NOT NULL,
+    solo INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
 CREATE TABLE Safety(
     playerID INT PRIMARY KEY,
-    solo_tackles INT NOT NULL,
-    total_tackles INT NOT NULL,
-    interceptions INT NOT NULL,
-    passes_defended INT NOT NULL,
+    solo INT NOT NULL,
+    tot INT NOT NULL,
+    int INT NOT NULL,
+    pd INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 
 CREATE TABLE Kicker(
     playerID INT PRIMARY KEY,
-    longest_field_goal INT NOT NULL,
-    field_goals_attempted INT NOT NULL,
-    field_goals_made INT NOT NULL,
-    points INT NOT NULL,
+    long INT NOT NULL,
+    fga INT NOT NULL,
+    fgm INT NOT NULL,
+    pts INT NOT NULL,
     FOREIGN KEY (playerID) REFERENCES Player(playerID)
 );
 

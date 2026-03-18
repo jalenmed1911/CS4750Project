@@ -9,7 +9,7 @@ Uses the cfbd module available from github.
 
 # will be easiest to manually add coaches and teams (just need names and descriptions for each)
 
-allowed_positions = {"QB", "RB", "WR", "LB", "S", "K"}
+allowed_positions = {"QB", "RB", "WR", "LB", "S", "PK"}
 
 # demarcate which of the many stats in cfbd we're using:
 selected_stats = {
@@ -18,7 +18,7 @@ selected_stats = {
     "WR": {("receiving", "YDS"), ("receiving", "REC"), ("receiving", "TD"), ("receiving", "LONG")},
     "LB": {("defensive", "SACKS"), ("defensive", "SOLO"), ("defensive", "TOT"), ("defensive", "TFL")},
     "S": {("defensive", "SOLO"), ("defensive", "TOT"), ("defensive", "PD"), ("defensive", "INT")},
-    "K": {("kicking", "FGA"), ("kicking", "FGM"), ("kicking", "LONG"), ("kicking", "PTS")}
+    "PK": {("kicking", "FGA"), ("kicking", "FGM"), ("kicking", "LONG"), ("kicking", "PTS")}
 }
 
 
@@ -35,7 +35,7 @@ configuration = cfbd.Configuration(
 
 # Configure Bearer authorization: apiKey
 configuration = cfbd.Configuration(
-    access_token = ""
+    access_token = "Gl66ANUF8zNrf/3cvBMwigZ2xq88ZVkFdQCU8ak87tpS/yyjtag84JrIQFL06lqQ"
 )
 
 
@@ -43,55 +43,49 @@ def main():
 
     # Enter a context with an instance of the API client
     with cfbd.ApiClient(configuration) as api_client:
-        # Create an instance of the API class
-        api_instance = cfbd.PlayersApi(api_client)
 
+        #get stats and players for all players in the acc
+        stats_api = cfbd.StatsApi(api_client)
+        api_response = stats_api.get_player_season_stats(2025, conference="acc")
 
-        # get all acc players
-        api_response = api_instance.get_player_usage(year=2025, conference='acc')
-        print(len(api_response))
-
-        #filter to just have the six positions
-        filtered_players = [
-            p for p in api_response
-            if getattr(p, "position", None) in allowed_positions
-        ]
-        
-        # save to dicts
-        player_dicts = []
-
-        for p in filtered_players:
-            player_dicts.append({
-                "id": p.id,
-                "name": p.name,
-                "position": p.position
-            })
-        
-        #now add hometown for each player
-        for p in player_dicts:
-            api_response = api_instance.search_players(p.get("name"))
-            for response in api_response:
-                p["hometown"] = response.hometown
-
-        #add stats
-        api_instance = cfbd.StatsApi(api_client)
-        api_response = api_instance.get_player_season_stats(2025, conference="acc")
-
-        player_map = {p["id"]: p for p in player_dicts}
-
+        player_map = {}
         for player_stat in api_response:
-            if player_stat.player_id in player_map.keys():
-                position = player_map.get(player_stat.player_id, {}).get("position")
-                if is_selected_stat(position, player_stat):
-                    player_dict = player_map.get(player_stat.player_id)
-                    player_dict[player_stat.stat_type] = player_stat.stat
+            if player_stat.position in allowed_positions:
+                if is_selected_stat(player_stat):
+                    id = player_stat.player_id
+
+                    if id in player_map.keys():
+                        #player has existing player_map entry
+                        player_map[id][player_stat.stat_type] = player_stat.stat
+                    else:
+                        #new player
+                        new_player_dict = {}
+                        new_player_dict["name"] = player_stat.player
+                        new_player_dict["position"] = player_stat.position
+                        new_player_dict["team"] = player_stat.team
+                        new_player_dict[player_stat.stat_type] = player_stat.stat
+                        player_map[id] = new_player_dict
+
+
+        #not all safeties have ints. Add field with zero if that stat is absent
+        for p in player_map.values():
+            if p["position"] == "S" and "INT" not in p.keys():
+                p["INT"] = "0"
+
+        #now add hometown for each player
+        players_api = cfbd.PlayersApi(api_client)
         
-        with open("player_map.json", "w") as f:
+        for player_dict in player_map.values():
+            api_response = players_api.search_players(player_dict.get("name"))
+            for response in api_response:
+                player_dict["hometown"] = response.hometown
+        
+        with open("playerdata.json", "w") as f:
             json.dump(player_map, f, indent=2)
 
 
-def is_selected_stat(position, stat):
-    if (stat.category, stat.stat_type) in selected_stats[position]:
+def is_selected_stat(stat):
+    if (stat.category, stat.stat_type) in selected_stats[stat.position]:
         return True
     else:
         return False
