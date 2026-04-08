@@ -194,4 +194,58 @@ function getTotalAverageValuation(){
     $stmt->closeCursor();
     return $res['average'];
 }
+
+function createUser($username, $password){
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    global $db;
+    $query = "INSERT INTO Portal_User (username, password) VALUES (:username, :password)";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':password', $hashed_password);
+    $stmt->execute();
+    $stmt->closeCursor();
+}
+
+function validLogin($username, $password){
+global $db;
+$query = "SELECT * FROM Portal_User WHERE username = :username";
+$stmt = $db->prepare($query);
+$stmt->bindParam(':username', $username);
+$stmt->execute();
+$res = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt->closeCursor();
+if ($res && password_verify($password, $res['password'])) {
+    return true;
+} else {
+    return false;
+}
+}
+
+function validateUsername($username){
+global $db;
+$query = "SELECT * FROM Portal_User WHERE username = :username";
+$stmt = $db->prepare($query);
+$stmt->bindParam(':username', $username);
+$stmt->execute();
+$res = $stmt->fetch(PDO::FETCH_ASSOC);
+$stmt->closeCursor();
+if ($res) {
+    return false;
+} else {
+    return true;
+}
+}
+function createAccount($username, $password){
+global $db;
+if (validateUsername($username)){
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    $query = "INSERT INTO Portal_User (username, password) VALUES (:username, :password)";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':username', $username);
+    $stmt->bindParam(':password', $hashed_password);
+$stmt->execute();
+$stmt->closeCursor();
+}
+}
+
 ?>

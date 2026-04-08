@@ -20,7 +20,7 @@ if (!isset($_SESSION['user'])) {
     <nav class="top-nav">
         <div class="brand">Fantasy Football Portal</div>
         <div class="user-menu">
-            <span>Welcome, <strong><?php echo htmlspecialchars($_SESSION['user']); ?></strong></span>
+            <span>Welcome, <a href="profile.php" style="text-decoration: none; color: inherit;"><strong><?php echo htmlspecialchars($_SESSION['user']); ?></strong></a></span>
             <a href="index.php?logout=1" class="logout-link">Logout</a>
         </div>
     </nav>
