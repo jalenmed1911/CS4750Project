@@ -118,6 +118,9 @@ $playerTeamName = null;
                     <p>You are not currently associated with a player profile. Please contact support if this is incorrect.</p>
                 <?php endif; ?>
             </div>
+            <form method="post" action="index.php">
+                <button type="submit" name="Delete" style="margin-top: 20px; background-color: #e11d48; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;">Delete Account</button>
+            </form>
         </main>
     </div>
 </body>

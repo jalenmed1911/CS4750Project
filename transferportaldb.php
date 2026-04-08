@@ -248,4 +248,13 @@ $stmt->closeCursor();
 }
 }
 
+function deleteUser($username){
+    global $db;
+    $query = "DELETE FROM Portal_User WHERE username = :username";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $stmt->closeCursor();
+}
+
 ?>

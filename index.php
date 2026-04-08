@@ -31,6 +31,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['CreateAccount'])) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete'])) {
+    deleteUser($_SESSION['user']);
+    session_destroy();
+    header("Location: index.php");
+    exit();
+}
+
 // Logout logic
 if (isset($_GET['logout'])) {
     session_destroy();
