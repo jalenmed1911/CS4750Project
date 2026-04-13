@@ -1,0 +1,26 @@
+[
+{"type":"header","version":"5.2.0","comment":"Export to JSON plugin for PHPMyAdmin"},
+{"type":"database","name":"cdh8zs"},
+{"type":"table","name":"Team","database":"cdh8zs","data":
+[
+{"teamID":"1","name":"Clemson University","valuation_threshold":"0","description":"Tigers"},
+{"teamID":"2","name":"Duke University","valuation_threshold":"0","description":"Blue Devils"},
+{"teamID":"3","name":"University of North Carolina at Chapel Hill","valuation_threshold":"0","description":"Tar Heels"},
+{"teamID":"4","name":"North Carolina State University","valuation_threshold":"0","description":"Wolfpack"},
+{"teamID":"5","name":"Wake Forest University","valuation_threshold":"0","description":"Demon Deacons"},
+{"teamID":"6","name":"University of Virginia","valuation_threshold":"0","description":"Cavaliers"},
+{"teamID":"7","name":"Georgia Institute of Technology","valuation_threshold":"0","description":"Yellow Jackets"},
+{"teamID":"8","name":"Florida State University","valuation_threshold":"0","description":"Seminoles"},
+{"teamID":"9","name":"University of Miami","valuation_threshold":"0","description":"Hurricanes"},
+{"teamID":"10","name":"Virginia Polytechnic Institute and State University","valuation_threshold":"0","description":"Hokies"},
+{"teamID":"11","name":"Boston College","valuation_threshold":"0","description":"Eagles"},
+{"teamID":"12","name":"University of Pittsburgh","valuation_threshold":"0","description":"Panthers"},
+{"teamID":"13","name":"Syracuse University","valuation_threshold":"0","description":"Orange"},
+{"teamID":"14","name":"University of Notre Dame","valuation_threshold":"0","description":"Fighting Irish"},
+{"teamID":"15","name":"University of Louisville","valuation_threshold":"0","description":"Cardinals"},
+{"teamID":"16","name":"Southern Methodist University","valuation_threshold":"0","description":"Mustangs"},
+{"teamID":"17","name":"University of California, Berkeley","valuation_threshold":"0","description":"Golden Bears"},
+{"teamID":"18","name":"Stanford University","valuation_threshold":"0","description":"Cardinal"}
+]
+}
+]
