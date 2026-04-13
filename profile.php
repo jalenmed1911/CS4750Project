@@ -71,9 +71,10 @@ $playerTeamName = null;
         <aside class="sidebar">
             <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard Overview</a></li>
-                <li><a href="#">Player Database</a></li>
+                <li><a href="playerManagement.php">Player Management</a></li>
                 <li><a href="#">Team Management</a></li>
                 <li><a href="#">Recruitment Offers</a></li>
+                <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
         </aside>
         

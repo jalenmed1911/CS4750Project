@@ -7,6 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($
     // In a real app, you would validate credentials against the DB here
     if (validLogin($_POST['username'], $_POST['password'])) {
         $_SESSION['user'] = $_POST['username'];
+        $_SESSION['userID'] = getUserID($_POST['username']);
         header("Location: dashboard.php");
         exit();
     } else {
@@ -57,28 +58,4 @@ if (!isset($_SESSION['user'])) {
 }
 ?>
 
-<!-- <!DOCTYPE html>
-<html>
-<head>
-    <title>Transfer Portal</title>
-    <link rel="stylesheet" href="login.css">
-</head>
-<body>
-    <div class="login-container">
-        <h2>Transfer Portal Login</h2>
-        <form method="post" action="index.php">
-            <div class="form-group">
-                <label>Username</label>
-                <input type="text" name="username" required>
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-            <button>Sign In</button>
-            <button style="margin-top: 10px;">Create Account</button>
-            <?php if (isset($error)) { echo '<p class="error">' . htmlspecialchars($error) . '</p>'; } ?>
-        </form>
-    </div>
-</body>
-</html> -->
+<?php if (isset($error)) { echo '<p class="error">' . htmlspecialchars($error) . '</p>'; } ?>
