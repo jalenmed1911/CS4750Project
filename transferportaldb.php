@@ -70,9 +70,19 @@ return $res;
 
 function getOffersByPlayer($player_id, $status="All"){
 global $db;
-$query = "SELECT * FROM Offers WHERE playerID = :player_id";
+if ($status == "All") {
+    $query = "SELECT * FROM Offers WHERE playerID = :player_id";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':player_id', $player_id);
+    $stmt->execute();
+    $res = $stmt->fetchAll();
+    $stmt->closeCursor();
+    return $res;
+}
+$query = "SELECT * FROM Offers WHERE playerID = :player_id AND status = :status";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':player_id', $player_id);
+$stmt->bindParam(':status', $status);
 $stmt->execute();
 $res = $stmt->fetchAll();
 $stmt->closeCursor();
@@ -81,9 +91,10 @@ return $res;
 
 function getOffersByCoach($coach_id, $status="All"){
 global $db;
-$query = "SELECT * FROM Offers WHERE coachID = :coach_id";
+$query = "SELECT * FROM Offers WHERE coachID = :coach_id AND status = :status";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':coach_id', $coach_id);
+$stmt->bindParam(':status', $status);
 $stmt->execute();
 $res = $stmt->fetchAll();
 $stmt->closeCursor();
@@ -257,4 +268,58 @@ function deleteUser($username){
     $stmt->closeCursor();
 }
 
+function getUserID($username){
+    global $db;
+    $query = "SELECT userID FROM Portal_User WHERE username = :username";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res['userID'];
+}
+
+function getUserPlayers($userID){
+    global $db;
+    $query = "SELECT * FROM Player JOIN Plays_As ON Player.playerID = Plays_As.playerID WHERE Plays_As.userID = :userID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':userID', $userID);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res[0];
+}
+function createOffer($coachID, $playerID, $offer_amount){
+    global $db;
+    $query = "INSERT INTO Offers (coachID, playerID, amount, status) VALUES (:coachID, :playerID, :offer_amount, 'Pending')";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->bindParam(':amount', $offer_amount);
+    $stmt->execute();
+    $stmt->closeCursor();
+}
+
+function getAllPlayers(){
+    global $db;
+    $query = "SELECT * FROM Player";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+}
+
+
+function getOfferTeamByCoach($coachID){
+    global $db;
+    $query = "SELECT t.teamID FROM Team t JOIN Coach c ON t.teamID = c.teamID WHERE c.coachID = :coachID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':coachID', $coachID);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+
+}
 ?>
