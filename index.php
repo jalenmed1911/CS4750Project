@@ -2,9 +2,7 @@
 session_start();
 require("transferportaldb.php");
 
-// Simple login logic
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($_POST['password'])) {
-    // In a real app, you would validate credentials against the DB here
     if (validLogin($_POST['username'], $_POST['password'])) {
         $_SESSION['user'] = $_POST['username'];
         $_SESSION['userID'] = getUserID($_POST['username']);
@@ -39,14 +37,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete'])) {
     exit();
 }
 
-// Logout logic
 if (isset($_GET['logout'])) {
     session_destroy();
     header("Location: index.php");
     exit();
 }
 
-// Redirect if already logged in
 if (isset($_SESSION['user'])) {
     header("Location: dashboard.php");
     exit();
