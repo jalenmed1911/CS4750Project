@@ -320,6 +320,195 @@ function getOfferTeamByCoach($coachID){
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
     return $res;
-
 }
+
+function createNewPlayer($playerName, $position, $hometown, $userID, $stats_array){
+    global $db;
+
+    $playerID = "999" . $userID;
+
+    if ($position == 'QB') {
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':name', $playerName);
+        $stmt->bindParam(':position', $position);
+        $stmt->bindParam(':hometown', $hometown);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Quarterback (playerID, yards, percentage,touchdowns,interceptions) VALUES (:playerID, :yards, :percentage, :touchdowns, :interceptions)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':yards', $stats_array['yards']);
+        $stmt->bindParam(':percentage', $stats_array['passing_percentage']);
+        $stmt->bindParam(':touchdowns', $stats_array['touchdowns']);
+        $stmt->bindParam(':interceptions', $stats_array['interceptions']);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Plays_As (playerID, userID) VALUES (:playerID, :userID)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+    }
+    elseif ($position == 'RB') {
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':name', $playerName);
+        $stmt->bindParam(':position', $position);
+        $stmt->bindParam(':hometown', $hometown);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Running_Back (playerID, longest, touchdowns, carries, yards) VALUES (:playerID, :longest, :touchdowns, :carries, :yards)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':longest', $stats_array['longest']);
+        $stmt->bindParam(':touchdowns', $stats_array['touchdowns']);
+        $stmt->bindParam(':carries', $stats_array['carries']);
+        $stmt->bindParam(':yards', $stats_array['yards']);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Plays_As (playerID, userID) VALUES (:playerID, :userID)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+
+    elseif ($position == 'WR') {
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':name', $playerName);
+        $stmt->bindParam(':position', $position);
+        $stmt->bindParam(':hometown', $hometown);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Wide_Receiver (playerID, receptions, yards, touchdowns, longest) VALUES (:playerID, :receptions, :yards, :touchdowns, :longest)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':receptions', $stats_array['receptions']);
+        $stmt->bindParam(':yards', $stats_array['yards']);
+        $stmt->bindParam(':touchdowns', $stats_array['touchdowns']);
+        $stmt->bindParam(':longest', $stats_array['longest']);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Plays_As (playerID, userID) VALUES (:playerID, :userID)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+
+    elseif ($position == 'LB') {
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':name', $playerName);
+        $stmt->bindParam(':position', $position);
+        $stmt->bindParam(':hometown', $hometown);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Linebacker (playerID, sacks, tackles_for_loss, total_tackles, solo_tackles) VALUES (:playerID, :sacks, :tackles_for_loss, :total_tackles, :solo_tackles)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':sacks', $stats_array['sacks']);
+        $stmt->bindParam(':tackles_for_loss', $stats_array['tackles_for_loss']);
+        $stmt->bindParam(':total_tackles', $stats_array['total_tackles']);
+        $stmt->bindParam(':solo_tackles', $stats_array['solo_tackles']);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Plays_As (playerID, userID) VALUES (:playerID, :userID)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+
+    elseif ($position == 'S') {
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':name', $playerName);
+        $stmt->bindParam(':position', $position);
+        $stmt->bindParam(':hometown', $hometown);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Safety (playerID, solo_tackles, total_tackles, interceptions, passes_defended) VALUES (:playerID, :solo_tackles, :total_tackles, :interceptions, :passes_defended)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':solo_tackles', $stats_array['solo_tackles']);
+        $stmt->bindParam(':total_tackles', $stats_array['total_tackles']);
+        $stmt->bindParam(':interceptions', $stats_array['interceptions']);
+        $stmt->bindParam(':passes_defended', $stats_array['passes_defended']);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Plays_As (playerID, userID) VALUES (:playerID, :userID)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+
+    elseif ($position == 'K'){
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':name', $playerName);
+        $stmt->bindParam(':position', $position);
+        $stmt->bindParam(':hometown', $hometown);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Kicker (playerID, longest, fg_attempted, fg_made, points) VALUES (:playerID, :longest, :fg_attempted, :fg_made, :points)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':longest', $stats_array['longest']);
+        $stmt->bindParam(':fg_attempted', $stats_array['fg_attempted']);
+        $stmt->bindParam(':fg_made', $stats_array['fg_made']);
+        $stmt->bindParam(':points', $stats_array['points']);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "INSERT INTO Plays_As (playerID, userID) VALUES (:playerID, :userID)";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+}
+
+function hasPlayer($userID){
+    global $db;
+    $query = "SELECT * FROM Plays_As WHERE userID = :userID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':userID', $userID);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    if ($res) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
 ?>
