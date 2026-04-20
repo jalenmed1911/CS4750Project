@@ -15,11 +15,11 @@ require("transferportaldb.php");
         <form method="post" action="index.php">
             <div class="form-group">
                 <label>Username</label>
-                <input type="text" name="username" required>
+                <input type="text" name="Cusername" required>
             </div>
             <div class="form-group">
                 <label>Password</label>
-                <input type="password" name="password" required>
+                <input type="password" name="Cpassword" required>
             </div>
             <button type="submit" name="CreateAccount">Create Account</button>
         </form>

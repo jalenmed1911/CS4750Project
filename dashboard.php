@@ -2,7 +2,6 @@
 require("transferportaldb.php");
 session_start();
 
-// Security Check: Redirect to login if session is not set
 if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit();
