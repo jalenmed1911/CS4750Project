@@ -595,7 +595,7 @@ function leaveTeam($username){
 
     if ($playerID) {
 
-        $query = "SELECT coachID FROM Plays_For WHERE playerID = :playerID";
+        $query = "SELECT teamID FROM Plays_For WHERE playerID = :playerID";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->execute();
@@ -603,8 +603,9 @@ function leaveTeam($username){
         $stmt->closeCursor();
 
         if ($res) {
-            $coachID = $res['coachID'];
-            $query = "UPDATE Offers SET status = 'Rejected' WHERE playerID = :playerID AND coachID = :coachID AND status = 'Pending'";
+            $teamID = $res['teamID'];
+            $coachID = getCoachByTeam($teamID)['coachID'];
+            $query = "UPDATE Offers SET status = 'Rejected' WHERE playerID = :playerID AND coachID = :coachID AND (status = 'Pending' OR status = 'Accepted')";
             $stmt = $db->prepare($query);
             $stmt->bindParam(':playerID', $playerID);
             $stmt->bindParam(':coachID', $coachID);
@@ -662,4 +663,16 @@ function rejectOffer($playerID, $coachID){
     $stmt->execute();
     $stmt->closeCursor();
 }
+
+function getCoachByTeam($teamID){
+    global $db;
+    $query = "SELECT * FROM Coach WHERE teamID = :teamID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':teamID', $teamID);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+}
+
 ?>
