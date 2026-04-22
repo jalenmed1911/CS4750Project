@@ -386,7 +386,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     $playerID = "999" . $userID;
 
     if ($position == 'QB') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -414,7 +414,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
 
     }
     elseif ($position == 'RB') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -442,7 +442,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'WR') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -470,7 +470,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'LB') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -498,7 +498,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'S') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -526,7 +526,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'K'){
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
