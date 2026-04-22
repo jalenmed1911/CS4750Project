@@ -29,8 +29,7 @@ if (!isset($_SESSION['user'])) {
             <ul class="nav-links">
                 <li><a href="dashboard.php" class="active">Dashboard Overview</a></li>
                 <li><a href="playerManagement.php">Player Management</a></li>
-                <li><a href="#">Team Management</a></li>
-                <li><a href="#">Recruitment Offers</a></li>
+                <li><a href="#">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
         </aside>

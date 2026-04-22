@@ -109,6 +109,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Delete'])) {
     exit();
 }
 
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['LeaveTeam'])) {
+    leaveTeam($_SESSION['user']);
+    header("Location: playerManagement.php");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['AcceptOffer'])) {
+    $playerID = getUserPlayers($_SESSION['userID'])['playerID'];
+    acceptOffer($playerID, $_POST['coachID']);
+    header("Location: manageOffers.php");
+    exit(); 
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['RejectOffer'])) {
+    $playerID = getUserPlayers($_SESSION['userID'])['playerID'];
+    rejectOffer($playerID, $_POST['coachID']);
+    header("Location: manageOffers.php");
+    exit();
+}
+
 if (isset($_GET['logout'])) {
     session_destroy();
     header("Location: index.php");
