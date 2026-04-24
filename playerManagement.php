@@ -61,6 +61,7 @@ $username = $_SESSION['user'];
                 echo "<p><strong>Position:</strong> " . htmlspecialchars(str_replace('_', ' ', $pos_full)) . "</p>";
                 echo "<p><strong>Team:</strong> " . (hasTeam($myPlayer['playerID']) ? htmlspecialchars(getPlayerTeamName($myPlayer['playerID'])['name']) : "Free Agent") . "</p>";
                 echo "<p><strong>Valuation:</strong> " . number_format($myPlayer['valuation'], 0, '.', ',') . "</p>";                    
+                echo "<p><strong>Stars:</strong> " . number_format($myPlayer['stars'], 0, '.', ',') . "</p>";                    
                 echo "</div>";
                 ?>
                 <?php if (hasTeam($myPlayer['playerID'])): ?>
