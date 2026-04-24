@@ -29,8 +29,7 @@ if (!isset($_SESSION['user'])) {
             <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard Overview</a></li>
                 <li><a href="playerManagement.php">Player Management</a></li>
-                <li><a href="#">Team Management</a></li>
-                <li><a href="#">Recruitment Offers</a></li>
+                <li><a href="#">Team Search</a></li>
                 <li><a href="manageOffers.php" class="active">Manage Offers</a></li>
             </ul>
         </aside>
@@ -62,6 +61,14 @@ if (!isset($_SESSION['user'])) {
                     echo "<h3>" . "Team: " . htmlspecialchars($team['name']) . "</h3>";
                     echo "<p><strong>Status:</strong> " . htmlspecialchars($offer['status']) . "</p>";
                     echo "<p><strong>Valuation:</strong> $" . number_format($offer['valuation'], 0, '.', ',') . "</p>";
+                    if ($offer['status'] === 'Pending' && !hasTeam($playerID)) {
+                    echo "<form method='post' action='index.php'>";
+                    echo "<input type='hidden' name='coachID' value='" . $offer['coachID'] . "'>";
+                    echo "<button type='submit' name='AcceptOffer' style='margin-top: 20px; background-color: #37e11d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;'>Accept Offer</button> </form>";
+                    echo "<form method='post' action='index.php'>";
+                    echo "<input type='hidden' name='coachID' value='" . $offer['coachID'] . "'>";
+                    echo "<button type='submit' name='RejectOffer' style='margin-top: 20px; background-color: #e11d48; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;'>Reject Offer</button> </form>";
+                    }
                     echo "</div>";
                     echo "<hr>";
                 }

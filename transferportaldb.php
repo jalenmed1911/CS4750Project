@@ -261,6 +261,64 @@ $stmt->closeCursor();
 
 function deleteUser($username){
     global $db;
+    $userID = getUserID($username);
+
+    if (!$userID) {
+        return;
+    }
+    $playerData = getUserPlayers($userID);
+    $playerID = null;
+    if ($playerData && isset($playerData['playerID'])) {
+        $playerID = $playerData['playerID'];
+    }
+    if ($playerID) {
+        $query = "DELETE FROM Offers WHERE playerID = :playerID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "DELETE FROM Plays_For WHERE playerID = :playerID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $playerInfo = getPlayerByID($playerID);
+        if ($playerInfo && isset($playerInfo['position'])) {
+            $position = $playerInfo['position'];
+            $table = "";
+            switch ($position) {
+                case 'QB': $table = "Quarterback"; break;
+                case 'RB': $table = "Running_Back"; break;
+                case 'WR': $table = "Wide_Receiver"; break;
+                case 'LB': $table = "Linebacker"; break;
+                case 'S':  $table = "Safety"; break;
+                case 'PK': $table = "Kicker"; break;
+            }
+            if ($table) {
+                $query = "DELETE FROM $table WHERE playerID = :playerID";
+                $stmt = $db->prepare($query);
+                $stmt->bindParam(':playerID', $playerID);
+                $stmt->execute();
+                $stmt->closeCursor();
+            }
+        }
+
+        
+        $query = "DELETE FROM Plays_As WHERE userID = :userID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':userID', $userID);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+        $query = "DELETE FROM Player WHERE playerID = :playerID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->execute();
+        $stmt->closeCursor();
+        }
+        
     $query = "DELETE FROM Portal_User WHERE username = :username";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':username', $username);
@@ -328,7 +386,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     $playerID = "999" . $userID;
 
     if ($position == 'QB') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -356,7 +414,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
 
     }
     elseif ($position == 'RB') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -384,7 +442,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'WR') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -412,7 +470,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'LB') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -440,7 +498,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'S') {
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -468,7 +526,7 @@ function createNewPlayer($playerName, $position, $hometown, $userID, $stats_arra
     }
 
     elseif ($position == 'K'){
-        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 100, 1)";
+        $query = "INSERT INTO Player (playerID, name, position, hometown, valuation, stars) VALUES (:playerID, :name, :position, :hometown, 0, 1)";
         $stmt = $db->prepare($query);
         $stmt->bindParam(':playerID', $playerID);
         $stmt->bindParam(':name', $playerName);
@@ -509,6 +567,112 @@ function hasPlayer($userID){
     } else {
         return false;
     }
+}
+
+function hasTeam($playerID){
+    global $db;
+    $query = "SELECT * FROM Plays_For WHERE playerID = :playerID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    if ($res) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function leaveTeam($username){
+    global $db;
+    $userID = getUserID($username);
+    $playerData = getUserPlayers($userID);
+    $playerID = null;
+    if ($playerData && isset($playerData['playerID'])) {
+        $playerID = $playerData['playerID'];
+    }
+
+    if ($playerID) {
+
+        $query = "SELECT teamID FROM Plays_For WHERE playerID = :playerID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->execute();
+        $res = $stmt->fetch(PDO::FETCH_ASSOC);
+        $stmt->closeCursor();
+
+        if ($res) {
+            $teamID = $res['teamID'];
+            $coachID = getCoachByTeam($teamID)['coachID'];
+            $query = "UPDATE Offers SET status = 'Rejected' WHERE playerID = :playerID AND coachID = :coachID AND (status = 'Pending' OR status = 'Accepted')";
+            $stmt = $db->prepare($query);
+            $stmt->bindParam(':playerID', $playerID);
+            $stmt->bindParam(':coachID', $coachID);
+            $stmt->execute();
+            $stmt->closeCursor();
+        }
+
+        $query = "DELETE FROM Plays_For WHERE playerID = :playerID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->execute();
+        $stmt->closeCursor();
+
+
+    }
+}
+
+function acceptOffer($playerID, $coachID){
+    global $db;
+    $query = "UPDATE Offers SET status = 'Accepted' WHERE playerID = :playerID AND coachID = :coachID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->bindParam(':coachID', $coachID);
+    $stmt->execute();
+    $stmt->closeCursor(); 
+    
+    
+    $query = "SELECT playerID, coachID FROM Offers WHERE playerID = :playerID AND coachID = :coachID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->bindParam(':coachID', $coachID);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    $playerID = $res['playerID'];
+    $coachID = $res['coachID'];
+
+    $teamID = getOfferTeamByCoach($coachID)['teamID'];
+
+    $query = "INSERT INTO Plays_For (playerID, teamID) VALUES (:playerID, :teamID)";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->bindParam(':teamID', $teamID);
+    $stmt->execute();
+    $stmt->closeCursor();
+}
+
+function rejectOffer($playerID, $coachID){
+    global $db;
+    $query = "UPDATE Offers SET status = 'Rejected' WHERE playerID = :playerID AND coachID = :coachID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->bindParam(':coachID', $coachID);
+    $stmt->execute();
+    $stmt->closeCursor();
+}
+
+function getCoachByTeam($teamID){
+    global $db;
+    $query = "SELECT * FROM Coach WHERE teamID = :teamID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':teamID', $teamID);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
 }
 
 ?>

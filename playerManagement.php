@@ -6,6 +6,7 @@ if (!isset($_SESSION['user'])) {
     header("Location: index.php");
     exit();
 }
+$username = $_SESSION['user'];
 
 ?>
 <!DOCTYPE html>
@@ -33,8 +34,7 @@ if (!isset($_SESSION['user'])) {
             <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard Overview</a></li>
                 <li><a href="playerDatabase.php" class="active">Player Management</a></li>
-                <li><a href="#">Team Management</a></li>
-                <li><a href="#">Recruitment Offers</a></li>
+                <li><a href="#">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
         </aside>
@@ -64,13 +64,16 @@ if (!isset($_SESSION['user'])) {
 
                 echo "<div class='player-card'>";
                 echo "<h3>" . htmlspecialchars($myPlayer['name']) . "</h3>";
-                echo "<p><strong>Position:</strong> " . htmlspecialchars($position) . "</p>";
+                echo "<p><strong>Position:</strong> " . htmlspecialchars($myPlayer['position']) . "</p>";
                 echo "<p><strong>Team:</strong> " . htmlspecialchars(getPlayerTeamName($myPlayer['playerID'])['name']) . "</p>";
-                echo "<p><strong>Valuation:</strong> " . number_format($myPlayer['valuation'], 0, '.', ',') . "</p>";
-                echo "<p><strong>Stars:</strong> " . number_format($myPlayer['stars'], 0, '.', ',') . "</p>";
                 echo "<p><strong>Valuation:</strong> " . number_format($myPlayer['valuation'], 0, '.', ',') . "</p>";                    
                 echo "</div>";
                 ?>
+                <?php if (hasTeam($myPlayer['playerID'])): ?>
+                <form method="post" action="index.php">
+                <button type="submit" name="LeaveTeam" style="margin-top: 20px; background-color: #e11d48; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;">Leave Team</button>
+            </form>
+            <?php endif; ?>
                 </section>
                 
         </main>

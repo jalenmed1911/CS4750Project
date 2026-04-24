@@ -19,7 +19,7 @@ $playerTeamName = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - Transfer Portal</title>
-    <link rel="stylesheet" href="dashboard.css"> <!-- Reusing dashboard.css for consistency -->
+    <link rel="stylesheet" href="dashboard.css">
     <style>
         .profile-container {
             padding: 20px;
@@ -72,8 +72,7 @@ $playerTeamName = null;
             <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard Overview</a></li>
                 <li><a href="playerManagement.php">Player Management</a></li>
-                <li><a href="#">Team Management</a></li>
-                <li><a href="#">Recruitment Offers</a></li>
+                <li><a href="#">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
         </aside>
