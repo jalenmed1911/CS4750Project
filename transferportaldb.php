@@ -119,7 +119,7 @@ switch ($player['position']) {
     case 'WR': $table = "Wide_Receiver"; break;
     case 'LB': $table = "Linebacker"; break;
     case 'S':  $table = "Safety"; break;
-    case 'PK': $table = "Kicker"; break;
+    case 'K': $table = "Kicker"; break;
     default:   return null; 
 }
 

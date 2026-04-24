@@ -1,6 +1,7 @@
 <?php
 session_start();
 require("transferportaldb.php");
+require("positionStats.php");
 
 if (!isset($_SESSION['user'])) {
     header("Location: index.php");
@@ -49,31 +50,41 @@ $username = $_SESSION['user'];
                 <?php
                 $userID = $_SESSION['userID'];
 
-                $positions = [
-                    "K"  => "Kicker",
-                    "QB" => "Quarterback",
-                    "WR" => "Wide Receiver",
-                    "RB" => "Running Back",
-                    "LB" => "Linebacker",
-                    "S"  => "Safety"
-                ];
-
                 $myPlayer = getUserPlayers($userID);
-                $position = $positions[$myPlayer['position']];
-                $position_table = str_replace(' ', '_', $position);
+                $pos_abbr = $myPlayer['position'];
+                $config = $positionStats[$pos_abbr];
+                $pos_full = $config['table'];
+                $statsMap = $config['stats'];
 
                 echo "<div class='player-card'>";
                 echo "<h3>" . htmlspecialchars($myPlayer['name']) . "</h3>";
-                echo "<p><strong>Position:</strong> " . htmlspecialchars($myPlayer['position']) . "</p>";
-                echo "<p><strong>Team:</strong> " . htmlspecialchars(getPlayerTeamName($myPlayer['playerID'])['name']) . "</p>";
+                echo "<p><strong>Position:</strong> " . htmlspecialchars(str_replace('_', ' ', $pos_full)) . "</p>";
+                echo "<p><strong>Team:</strong> " . (hasTeam($myPlayer['playerID']) ? htmlspecialchars(getPlayerTeamName($myPlayer['playerID'])['name']) : "Free Agent") . "</p>";
                 echo "<p><strong>Valuation:</strong> " . number_format($myPlayer['valuation'], 0, '.', ',') . "</p>";                    
                 echo "</div>";
                 ?>
                 <?php if (hasTeam($myPlayer['playerID'])): ?>
                 <form method="post" action="index.php">
                 <button type="submit" name="LeaveTeam" style="margin-top: 20px; background-color: #e11d48; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;">Leave Team</button>
-            </form>
-            <?php endif; ?>
+                </form>
+                <?php endif; ?>
+
+                <?php
+                $stats = getStatsByPlayer($myPlayer['playerID']);
+
+                if (!$stats) {
+                    echo "No stats found.";
+                    return;
+                }
+
+                $pos = $stats['position']; // "QB", "RB", etc.
+                $config = $positionStats[$pos];
+
+                foreach ($config['stats'] as $column => $label) {
+                    echo "<p><strong>$label:</strong> " . htmlspecialchars($stats[$column]) . "</p>";
+                }
+                ?>
+
                 </section>
                 
         </main>
