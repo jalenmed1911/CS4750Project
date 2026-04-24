@@ -49,11 +49,25 @@ if (!isset($_SESSION['user'])) {
                 <?php
                 $userID = $_SESSION['userID'];
 
+                $positions = [
+                    "K"  => "Kicker",
+                    "QB" => "Quarterback",
+                    "WR" => "Wide Receiver",
+                    "RB" => "Running Back",
+                    "LB" => "Linebacker",
+                    "S"  => "Safety"
+                ];
+
                 $myPlayer = getUserPlayers($userID);
+                $position = $positions[$myPlayer['position']];
+                $position_table = str_replace(' ', '_', $position);
+
                 echo "<div class='player-card'>";
                 echo "<h3>" . htmlspecialchars($myPlayer['name']) . "</h3>";
-                echo "<p><strong>Position:</strong> " . htmlspecialchars($myPlayer['position']) . "</p>";
+                echo "<p><strong>Position:</strong> " . htmlspecialchars($position) . "</p>";
                 echo "<p><strong>Team:</strong> " . htmlspecialchars(getPlayerTeamName($myPlayer['playerID'])['name']) . "</p>";
+                echo "<p><strong>Valuation:</strong> " . number_format($myPlayer['valuation'], 0, '.', ',') . "</p>";
+                echo "<p><strong>Stars:</strong> " . number_format($myPlayer['stars'], 0, '.', ',') . "</p>";
                 echo "<p><strong>Valuation:</strong> " . number_format($myPlayer['valuation'], 0, '.', ',') . "</p>";                    
                 echo "</div>";
                 ?>
