@@ -1,46 +1,18 @@
 <?php
-// Remember to start the database server (or GCP SQL instance) before trying to connect to it
-////////////////////////////////////////////
-/** S26, PHP (on Google Standard App Engine) connect to MySQL instance (GCP) **/
-// $username = 'root';                       // or your username
-// $password = 'your-root-password';     
-// $host = 'instance-connection-name';       // e.g., 'cs4750:us-east4:db-demo'; 
-// $dbname = 'your-database-name';           // e.g., 'guestbook';
-// $dsn = "mysql:unix_socket=/cloudsql/instance-connection-name;dbname=your-database-name";
-//       e.g., "mysql:unix_socket=/cloudsql/cs4750:us-east4:db-demo;dbname=guestbook";
-
-// to get instance connection name, go to GCP SQL overview page
-////////////////////////////////////////////
-
-/** S26, PHP (on local XAMPP or CS server) connect to MySQL instance (GCP) **/
-// $username = 'root';
-// $password = 'your-root-password';
-// $host = 'instance-connection-name';       // e.g., 'cs4750:us-east4:db-demo'; 
-// $dbname = 'your-database-name;;           // e.g., 'guestbook';
-// $dsn = "mysql:host=your-SQL-public-IP-address;dbname=your-database-name";   // connect PHP (XAMPP) to DB (GCP)
-//       e.g., "mysql:host=99.99.999.99;dbname=$dbname";   
-
-// to get public IP address of the SQL instance, go to GCP SQL overview page
-
-// To connect from a local PHP to GCP SQL instance, need to add authormized network
-// to allow (my)machine to connect to the SQL instance. 
-// 1. Get IP of the computer that tries to connect to the SQL instance
-//    (use http://ipv4.whatismyv6.com/ to find the IP address)
-// 2. On the SQL connections page, add authorized networks, enter the IP address
-////////////////////////////////////////////
-
-/** S26, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on local XAMPP) **/
-// $username = 'your-username';
-// $password = 'your-password';
-// $host = 'localhost:3306';
-// $dbname = 'your-dbname';
-// $dsn = "mysql:host=$host;dbname=$dbname";
-////////////////////////////////////////////
 
 /** S26, PHP (on GCP, local XAMPP, or CS server) connect to MySQL (on CS server) **/
 /** need VPN if php is not on CS server **/
-$username = 'cdh8zs';
-$password = 'transferportal';
+
+$role = $_SESSION['role'] ?? 'user';
+
+if ($role === 'admin') {
+    $username = 'cdh8zs';
+    $password = 'transferportal';
+} else {
+    $username = 'cdh8zs';
+    $password = 'transferportal';
+}
+
 $host = 'mysql01.cs.virginia.edu';
 $dbname = 'cdh8zs';
 $dsn = "mysql:host=$host;dbname=$dbname";

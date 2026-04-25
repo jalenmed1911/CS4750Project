@@ -3,13 +3,19 @@ session_start();
 require("transferportaldb.php");
 
 
-
-
-
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($_POST['password'])) {
     if (validLogin($_POST['username'], $_POST['password'])) {
         $_SESSION['user'] = $_POST['username'];
         $_SESSION['userID'] = getUserID($_POST['username']);
+
+        // DEFAULT role
+        $_SESSION['role'] = 'user';
+
+        // HARD-CODED ADMIN ACCOUNTS
+        if ($username === 'admin' && $password === 'secure99') {
+            $_SESSION['role'] = 'admin';
+        }
+
         if (hasPlayer($_SESSION['userID'])){
         header("Location: dashboard.php");
         } else {
