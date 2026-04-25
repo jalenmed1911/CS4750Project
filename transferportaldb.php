@@ -349,6 +349,24 @@ function getUserPlayers($userID){
 }
 function createOffer($coachID, $playerID, $offer_amount){
     global $db;
+
+    $query = "SELECT * FROM Offers WHERE coachID = :coachID AND playerID = :playerID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->execute();
+    $existingOffer = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    if ($existingOffer) {
+        $query = "UPDATE Offers SET status = 'Rejected' WHERE coachID = :coachID AND playerID = :playerID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':coachID', $coachID);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+
     $query = "INSERT INTO Offers (coachID, playerID, amount, status) VALUES (:coachID, :playerID, :amount, 'Pending')";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':coachID', $coachID);
