@@ -81,9 +81,11 @@ if (!isset($_SESSION['user'])) {
                     if ($offer['status'] === 'Pending' && !hasTeam($playerID)) {
                     echo "<form method='post' action='index.php'>";
                     echo "<input type='hidden' name='coachID' value='" . $offer['coachID'] . "'>";
+                    echo "<input type='hidden' name='offerID' value='" . $offer['offerID'] . "'>";
                     echo "<button type='submit' name='AcceptOffer' style='margin-top: 20px; background-color: #37e11d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;'>Accept Offer</button> </form>";
                     echo "<form method='post' action='index.php'>";
                     echo "<input type='hidden' name='coachID' value='" . $offer['coachID'] . "'>";
+                    echo "<input type='hidden' name='offerID' value='" . $offer['offerID'] . "'>";
                     echo "<button type='submit' name='RejectOffer' style='margin-top: 20px; background-color: #e11d48; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;'>Reject Offer</button> </form>";
                     }
                     echo "</div>";

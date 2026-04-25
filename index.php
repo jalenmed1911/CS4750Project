@@ -129,7 +129,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['LeaveTeam'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['AcceptOffer'])) {
     $playerID = getUserPlayers($_SESSION['userID'])['playerID'];
-    acceptOffer($playerID, $_POST['coachID']);
+    acceptOffer($_POST['offerID']);
     $_SESSION['success'] = "Offer accepted! You are now part of the team.";
     header("Location: manageOffers.php");
     exit(); 
@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['AcceptOffer'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['RejectOffer'])) {
     $playerID = getUserPlayers($_SESSION['userID'])['playerID'];
-    rejectOffer($playerID, $_POST['coachID']);
+    rejectOffer($_POST['offerID']);
     $_SESSION['success'] = "Offer rejected.";
     header("Location: manageOffers.php");
     exit();

@@ -623,20 +623,18 @@ function leaveTeam($username){
     }
 }
 
-function acceptOffer($playerID, $coachID){
+function acceptOffer($offerID){
     global $db;
-    $query = "UPDATE Offers SET status = 'Accepted' WHERE playerID = :playerID AND coachID = :coachID";
+    $query = "UPDATE Offers SET status = 'Accepted' WHERE offerID = :offerID";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':playerID', $playerID);
-    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':offerID', $offerID);
     $stmt->execute();
     $stmt->closeCursor(); 
     
     
-    $query = "SELECT playerID, coachID FROM Offers WHERE playerID = :playerID AND coachID = :coachID";
+    $query = "SELECT playerID, coachID FROM Offers WHERE offerID = :offerID";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':playerID', $playerID);
-    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':offerID', $offerID);
     $stmt->execute();
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
@@ -654,12 +652,11 @@ function acceptOffer($playerID, $coachID){
     $stmt->closeCursor();
 }
 
-function rejectOffer($playerID, $coachID){
+function rejectOffer($offerID){
     global $db;
-    $query = "UPDATE Offers SET status = 'Rejected' WHERE playerID = :playerID AND coachID = :coachID";
+    $query = "UPDATE Offers SET status = 'Rejected' WHERE offerID = :offerID";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':playerID', $playerID);
-    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':offerID', $offerID);
     $stmt->execute();
     $stmt->closeCursor();
 }

@@ -21,6 +21,13 @@ if (!$team) {
 
 $coach = getCoachByTeam($teamID);
 $players = getPlayersByTeam($teamID);
+
+$isAlreadyOnThisTeam = false;
+if ($_SESSION['role'] === 'user') {
+    $userPlayer = getUserPlayers($_SESSION['userID']);
+    $playerTeam = $userPlayer ? getPlayerTeamName($userPlayer['playerID']) : null;
+    $isAlreadyOnThisTeam = ($playerTeam && $playerTeam['name'] === $team['name']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -73,7 +80,7 @@ $players = getPlayersByTeam($teamID);
             <section class="activity-section">
                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
                     <h2>Roster</h2>
-                    <?php if ($_SESSION['role'] !== 'admin'): ?>
+                    <?php if ($_SESSION['role'] !== 'admin' && !$isAlreadyOnThisTeam): ?>
                         <form method="post" action="index.php" onsubmit="return confirm('Send a request to join this team?');">
                             <input type="hidden" name="teamID" value="<?php echo htmlspecialchars($teamID); ?>">
                             <button type="submit" name="JoinRequest" style="background-color: #3498db; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;">Request to Join Team</button>
