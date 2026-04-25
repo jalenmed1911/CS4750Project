@@ -766,4 +766,15 @@ function getAllOffersDetailed($status = 'Pending') {
     return $res;
 }
 
+function getTopTeams($limit = 3) {
+    global $db;
+    $query = "SELECT * FROM Team LIMIT :limit";
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+}
+
 ?>

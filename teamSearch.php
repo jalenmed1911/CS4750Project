@@ -7,10 +7,14 @@ if (!isset($_SESSION['user'])) {
     exit();
 }
 
-$searchQuery = $_GET['search'];
+$searchQuery = $_GET['search'] ?? '';
 $teams = [];
-if (!empty($searchQuery)) {
+$isSearch = !empty($searchQuery);
+
+if ($isSearch) {
     $teams = teamSearch($searchQuery);
+} else {
+    $teams = getTopTeams(3);
 }
 ?>
 <!DOCTYPE html>
@@ -46,8 +50,13 @@ if (!empty($searchQuery)) {
         </aside>
         <main class="main-content">
             <div class="welcome-header">
-                <h1>Team Search</h1>
-                <p>Find your next team and request to join their roster.</p>
+                <?php if ($isSearch): ?>
+                    <h1>Search Results</h1>
+                    <p>Displaying teams matching "<?php echo htmlspecialchars($searchQuery); ?>"</p>
+                <?php else: ?>
+                    <h1>Top Teams</h1>
+                    <p>Check out these featured programs or search for a specific team.</p>
+                <?php endif; ?>
             </div>
 
             <?php if (isset($_SESSION['error'])): ?>
@@ -69,10 +78,8 @@ if (!empty($searchQuery)) {
                 </form>
 
                 <div class="stats-container">
-                    <?php if (empty($teams) && !empty($searchQuery)): ?>
+                    <?php if (empty($teams) && $isSearch): ?>
                         <p>No teams found matching "<?php echo htmlspecialchars($searchQuery); ?>"</p>
-                    <?php elseif (empty($teams)): ?>
-                        <p>Search for a team to see results.</p>
                     <?php else: ?>
                         <?php foreach ($teams as $team): ?>
                             <a href="teamInfo.php?teamID=<?php echo $team['teamID']; ?>" style="text-decoration: none; color: inherit;">

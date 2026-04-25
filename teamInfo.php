@@ -22,6 +22,13 @@ if (!$team) {
 $coach = getCoachByTeam($teamID);
 $players = getPlayersByTeam($teamID);
 
+$valuation = 0;
+
+foreach ($players as $p){
+    $valuation += $p['valuation'];
+}
+$valuation = number_format($valuation / count($players), 1);
+
 $isAlreadyOnThisTeam = false;
 if ($_SESSION['role'] === 'user') {
     $userPlayer = getUserPlayers($_SESSION['userID']);
@@ -74,6 +81,10 @@ if ($_SESSION['role'] === 'user') {
                 <div class="stat-card">
                     <h3>Roster Size</h3>
                     <div class="value"><?php echo count($players); ?> Players</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Avg Team Valuation</h3>
+                    <div class="value"><?php echo $valuation; ?></div>
                 </div>
             </div>
 
