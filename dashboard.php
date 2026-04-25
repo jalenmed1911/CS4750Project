@@ -27,8 +27,13 @@ if (!isset($_SESSION['user'])) {
     <div class="dashboard-wrapper">
         <aside class="sidebar">
             <ul class="nav-links">
-                <li><a href="dashboard.php" class="active">Dashboard Overview</a></li>
-                <li><a href="playerManagement.php">Player Management</a></li>
+                <?php
+                if ($_SESSION['role'] == 'admin') {
+                    echo "<li><a href='dashboard.php' class='active'>Dashboard</a></li>";
+                } else {
+                    echo "<li><a href='playerManagement.php'>Dashboard</a></li>";
+                }
+                ?>
                 <li><a href="#">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
@@ -36,8 +41,8 @@ if (!isset($_SESSION['user'])) {
         
         <main class="main-content">
             <div class="welcome-header">
-                <h1>System Dashboard</h1>
-                <p>Manage your roster and player valuations from here.</p>
+                <h1>Admin Dashboard</h1>
+                <p>Manage the database system from here.</p>
             </div>
             
             <div class="stats-container">

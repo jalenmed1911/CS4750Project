@@ -12,12 +12,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($
         $_SESSION['role'] = 'user';
 
         // HARD-CODED ADMIN ACCOUNTS
-        if ($username === 'admin' && $password === 'secure99') {
+        if ($_SESSION['user'] === 'admin') {
             $_SESSION['role'] = 'admin';
         }
 
-        if (hasPlayer($_SESSION['userID'])){
-        header("Location: dashboard.php");
+        if ($_SESSION['role'] == 'admin') {
+            header("Location: dashboard.php");
+        } else if (hasPlayer($_SESSION['userID'])){
+            header("Location: playerManagement.php");
         } else {
             header("Location: createPlayer.php");
         }

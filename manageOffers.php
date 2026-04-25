@@ -27,8 +27,13 @@ if (!isset($_SESSION['user'])) {
     <div class="dashboard-wrapper">
         <aside class="sidebar">
             <ul class="nav-links">
-                <li><a href="dashboard.php">Dashboard Overview</a></li>
-                <li><a href="playerManagement.php">Player Management</a></li>
+                <?php
+                if ($_SESSION['role'] == 'admin') {
+                    echo "<li><a href='dashboard.php' class='active'>Dashboard</a></li>";
+                } else {
+                    echo "<li><a href='playerManagement.php'>Dashboard</a></li>";
+                }
+                ?>
                 <li><a href="#">Team Search</a></li>
                 <li><a href="manageOffers.php" class="active">Manage Offers</a></li>
             </ul>

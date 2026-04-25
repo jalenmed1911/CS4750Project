@@ -33,8 +33,13 @@ $username = $_SESSION['user'];
     <div class="dashboard-wrapper">
         <aside class="sidebar">
             <ul class="nav-links">
-                <li><a href="dashboard.php">Dashboard Overview</a></li>
-                <li><a href="playerDatabase.php" class="active">Player Management</a></li>
+                <?php
+                if ($_SESSION['role'] == 'admin') {
+                    echo "<li><a href='dashboard.php' class='active'>Dashboard</a></li>";
+                } else {
+                    echo "<li><a href='playerManagement.php'>Dashboard</a></li>";
+                }
+                ?>
                 <li><a href="#">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
@@ -42,8 +47,8 @@ $username = $_SESSION['user'];
         
         <main class="main-content">
             <div class="welcome-header">
-                <h1>Player Management</h1>
-                <p>Manage your player information and details.</p>
+                <h1>Player Dashboard</h1>
+                <p>Manage your player information.</p>
             </div>
             <section class="activity-section">
                 <h2>Player Information</h2>
