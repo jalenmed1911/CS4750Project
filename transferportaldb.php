@@ -750,4 +750,20 @@ function sendJoinRequest($playerID, $teamID) {
     return false;
 }
 
+function getAllOffersDetailed($status = 'Pending') {
+    global $db;
+    $query = "SELECT p.name AS player_name, t.name AS team_name, o.amount, o.status 
+              FROM Offers o
+              JOIN Player p ON o.playerID = p.playerID
+              JOIN Coach c ON o.coachID = c.coachID
+              JOIN Team t ON c.teamID = t.teamID
+              WHERE o.status = :status";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':status', $status);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+}
+
 ?>

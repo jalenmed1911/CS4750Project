@@ -39,8 +39,52 @@ if (!isset($_SESSION['user']) || (!isset($_SESSION['role']) || $_SESSION['role']
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
         </aside>
+
+                
         <main class="main-content">
             <div class="welcome-header">
+                <h1>Admin Dashboard</h1>
+                <p>Manage the database system from here.</p>
+            </div>
+            
+            <div class="stats-container">
+                <div class="stat-card"><h3>Total Players</h3><div class="value"><?php echo totalPlayers();?></div></div>
+                <div class="stat-card"><h3>Open Offers</h3><div class="value"><?php echo totalOffers(); ?></div></div>
+                <div class="stat-card"><h3>Avg Valuation</h3><div class="value"><?php echo number_format(getTotalAverageValuation(), 0, '.', ','); ?></div></div>
+            </div>
+            
+            <section class="activity-section">
+                <h2>All Open Offers</h2>
+                <?php 
+                $openOffers = getAllOffersDetailed('Pending');
+                if (empty($openOffers)): 
+                ?>
+                    <div class="placeholder-table">No open offers found in the system.</div>
+                <?php else: ?>
+                    <div style="overflow-x: auto; margin-top: 1rem;">
+                        <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                            <thead style="background-color: #f8fafc; border-bottom: 2px solid #edf2f7;">
+                                <tr>
+                                    <th style="padding: 1rem; color: #64748b; font-size: 0.85rem; text-transform: uppercase;">Player</th>
+                                    <th style="padding: 1rem; color: #64748b; font-size: 0.85rem; text-transform: uppercase;">Team</th>
+                                    <th style="padding: 1rem; color: #64748b; font-size: 0.85rem; text-transform: uppercase;">Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($openOffers as $offer): ?>
+                                <tr style="border-bottom: 1px solid #edf2f7;">
+                                    <td style="padding: 1rem; font-weight: 500;"><?php echo htmlspecialchars($offer['player_name']); ?></td>
+                                    <td style="padding: 1rem;"><?php echo htmlspecialchars($offer['team_name']); ?></td>
+                                    <td style="padding: 1rem; color: #059669; font-weight: 600;">$<?php echo number_format($offer['amount'] * 100, 0); ?></td>
+                                </tr>
+                                <?php endforeach; ?>
+                            </tbody>
+                        </table>
+                    </div>
+                <?php endif; ?>
+            </section>
+
+            <div class="welcome-header" style="margin-top: 4rem;">
                 <h1>Account Management Dashboard</h1>
                 <p>Manage the accounts from the database system here.</p>
             </div>
