@@ -72,7 +72,7 @@ $playerTeamName = null;
             <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard Overview</a></li>
                 <li><a href="playerManagement.php">Player Management</a></li>
-                <li><a href="#">Team Search</a></li>
+                <li><a href="teamSearch.php">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
         </aside>
