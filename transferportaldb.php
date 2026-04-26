@@ -145,7 +145,7 @@ return $res;
 
 function getPlayersByTeam($team_id){
 global $db;
-$query = "SELECT * FROM Player WHERE teamID = :team_id";
+$query = "SELECT * FROM Plays_For p JOIN Player t ON p.playerID = t.playerID WHERE p.teamID = :team_id";
 $stmt = $db->prepare($query);
 $stmt->bindParam(':team_id', $team_id);
 $stmt->execute();
@@ -209,7 +209,7 @@ function getTotalAverageValuation(){
 function createUser($username, $password){
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     global $db;
-    $query = "INSERT INTO Portal_User (username, password) VALUES (:username, :password)";
+    $query = "INSERT INTO Portal_User (username, password, isAdmin) VALUES (:username, :password, 0)";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':username', $username);
     $stmt->bindParam(':password', $hashed_password);
@@ -349,7 +349,25 @@ function getUserPlayers($userID){
 }
 function createOffer($coachID, $playerID, $offer_amount){
     global $db;
-    $query = "INSERT INTO Offers (coachID, playerID, amount, status) VALUES (:coachID, :playerID, :offer_amount, 'Pending')";
+
+    $query = "SELECT * FROM Offers WHERE coachID = :coachID AND playerID = :playerID";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':playerID', $playerID);
+    $stmt->execute();
+    $existingOffer = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+
+    if ($existingOffer) {
+        $query = "UPDATE Offers SET status = 'Rejected' WHERE coachID = :coachID AND playerID = :playerID";
+        $stmt = $db->prepare($query);
+        $stmt->bindParam(':coachID', $coachID);
+        $stmt->bindParam(':playerID', $playerID);
+        $stmt->execute();
+        $stmt->closeCursor();
+    }
+
+    $query = "INSERT INTO Offers (coachID, playerID, amount, status) VALUES (:coachID, :playerID, :amount, 'Pending')";
     $stmt = $db->prepare($query);
     $stmt->bindParam(':coachID', $coachID);
     $stmt->bindParam(':playerID', $playerID);
@@ -623,20 +641,18 @@ function leaveTeam($username){
     }
 }
 
-function acceptOffer($playerID, $coachID){
+function acceptOffer($offerID){
     global $db;
-    $query = "UPDATE Offers SET status = 'Accepted' WHERE playerID = :playerID AND coachID = :coachID";
+    $query = "UPDATE Offers SET status = 'Accepted' WHERE offerID = :offerID";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':playerID', $playerID);
-    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':offerID', $offerID);
     $stmt->execute();
     $stmt->closeCursor(); 
     
     
-    $query = "SELECT playerID, coachID FROM Offers WHERE playerID = :playerID AND coachID = :coachID";
+    $query = "SELECT playerID, coachID FROM Offers WHERE offerID = :offerID";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':playerID', $playerID);
-    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':offerID', $offerID);
     $stmt->execute();
     $res = $stmt->fetch(PDO::FETCH_ASSOC);
     $stmt->closeCursor();
@@ -654,12 +670,11 @@ function acceptOffer($playerID, $coachID){
     $stmt->closeCursor();
 }
 
-function rejectOffer($playerID, $coachID){
+function rejectOffer($offerID){
     global $db;
-    $query = "UPDATE Offers SET status = 'Rejected' WHERE playerID = :playerID AND coachID = :coachID";
+    $query = "UPDATE Offers SET status = 'Rejected' WHERE offerID = :offerID";
     $stmt = $db->prepare($query);
-    $stmt->bindParam(':playerID', $playerID);
-    $stmt->bindParam(':coachID', $coachID);
+    $stmt->bindParam(':offerID', $offerID);
     $stmt->execute();
     $stmt->closeCursor();
 }
@@ -724,6 +739,112 @@ function calculateNewStats($stats, $statsMap) {
     }
 
     return $newStats;
+
+}
+    
+function isAdmin($username){
+    global $db;
+    $query = "SELECT isAdmin FROM Portal_User WHERE username = :username";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $res = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res['isAdmin'] == 1;
+}
+
+function getAllUsers(){
+    global $db;
+    $query = "SELECT * FROM Portal_User";
+    $stmt = $db->prepare($query);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+}
+
+function addAdmin($username){
+    global $db;
+    $query = "UPDATE Portal_User SET isAdmin = 1 WHERE username = :username";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $stmt->closeCursor();
+}
+
+function removeAdmin($username){
+    global $db;
+    $query = "UPDATE Portal_User SET isAdmin = 0 WHERE username = :username";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':username', $username);
+    $stmt->execute();
+    $stmt->closeCursor();
+}
+
+function teamSearch($team_name){
+    global $db;
+    $query = "SELECT * FROM Team WHERE name LIKE :team_name";
+    $stmt = $db->prepare($query);
+    $like_team_name = '%' . $team_name . '%';
+    $stmt->bindParam(':team_name', $like_team_name);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+}
+
+function sendJoinRequest($playerID, $teamID) {
+    $player = getPlayerByID($playerID);
+    $coach = getCoachByTeam($teamID);
+
+    if (!$player || !$coach) {
+        return false;
+    }
+
+    // Probability of receiving an offer increases with star rating (Base 40% + 10% per star)
+    $probabilityThreshold = 40 + ($player['stars'] * 10);
+    $roll = rand(1, 100);
+
+    if ($roll <= $probabilityThreshold) {
+        // We take the base valuation and apply a random market variance (-5% to +20%)
+        // High-star players get a "prestige" multiplier (up to 15% extra)
+        $baseValuation = (float)$player['valuation'];
+        $marketVariance = rand(95, 120) / 100;
+        $prestigeMultiplier = 1 + ($player['stars'] * 0.03); 
+        
+        $offerAmount = $baseValuation * $marketVariance * $prestigeMultiplier;
+
+        createOffer($coach['coachID'], $playerID, $offerAmount);
+        return true;
+    }
+    return false;
+}
+
+function getAllOffersDetailed($status = 'Pending') {
+    global $db;
+    $query = "SELECT p.name AS player_name, t.name AS team_name, o.amount, o.status 
+              FROM Offers o
+              JOIN Player p ON o.playerID = p.playerID
+              JOIN Coach c ON o.coachID = c.coachID
+              JOIN Team t ON c.teamID = t.teamID
+              WHERE o.status = :status";
+    $stmt = $db->prepare($query);
+    $stmt->bindParam(':status', $status);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
+}
+
+function getTopTeams($limit = 3) {
+    global $db;
+    $query = "SELECT * FROM Team LIMIT :limit";
+    $stmt = $db->prepare($query);
+    $stmt->bindValue(':limit', (int)$limit, PDO::PARAM_INT);
+    $stmt->execute();
+    $res = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt->closeCursor();
+    return $res;
 }
 
 ?>

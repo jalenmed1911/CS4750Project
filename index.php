@@ -12,11 +12,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['username']) && isset($
         $_SESSION['role'] = 'user';
 
         // HARD-CODED ADMIN ACCOUNTS
-        if ($_SESSION['user'] === 'admin') {
+        if (isAdmin($_SESSION['user'])) {
             $_SESSION['role'] = 'admin';
         }
 
-        if ($_SESSION['role'] == 'admin') {
+        if ($_SESSION['role'] === 'admin') {
             header("Location: dashboard.php");
         } else if (hasPlayer($_SESSION['userID'])){
             header("Location: playerManagement.php");
@@ -89,7 +89,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Playername']) && isset
     }
 
     createNewPlayer($_POST['Playername'], $position, $_POST['Playerhometown'], $_SESSION['userID'], $stats);
-    header("Location: dashboard.php");
+    if ($_SESSION['role'] === 'admin') {
+        header("Location: dashboard.php");
+    } else {
+        header("Location: playerManagement.php");
+    }
     exit();
 }
 
@@ -125,17 +129,55 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['LeaveTeam'])) {
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['AcceptOffer'])) {
     $playerID = getUserPlayers($_SESSION['userID'])['playerID'];
-    acceptOffer($playerID, $_POST['coachID']);
+    acceptOffer($_POST['offerID']);
+    $_SESSION['success'] = "Offer accepted! You are now part of the team.";
     header("Location: manageOffers.php");
     exit(); 
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['RejectOffer'])) {
     $playerID = getUserPlayers($_SESSION['userID'])['playerID'];
-    rejectOffer($playerID, $_POST['coachID']);
+    rejectOffer($_POST['offerID']);
+    $_SESSION['success'] = "Offer rejected.";
     header("Location: manageOffers.php");
     exit();
 }
+
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['deleteUser'])) {
+    deleteUser(getUserByID($_POST['userID'])['username']);
+    $_SESSION['success'] = "User account successfully deleted.";
+    header("Location: dashboard.php");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['removeAdmin'])) {
+    removeAdmin(getUserByID($_POST['userID'])['username']);
+    $_SESSION['success'] = "Admin privileges removed.";
+    header("Location: dashboard.php");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['makeAdmin'])) {
+    addAdmin(getUserByID($_POST['userID'])['username']);
+    $_SESSION['success'] = "User promoted to Admin.";
+    header("Location: dashboard.php");
+    exit();
+}
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['JoinRequest'])) {
+    $playerID = getUserPlayers($_SESSION['userID'])['playerID'];
+
+    if (sendJoinRequest($playerID, $_POST['teamID'])) {
+        $_SESSION['success'] = "The team was impressed! You have a new pending offer.";
+        header("Location: manageOffers.php");
+    } else {
+        $_SESSION['error'] = "The team's coaching staff has declined your request at this time.";
+        header("Location: teamSearch.php");
+    }
+    exit();
+}
+
 
 if (isset($_GET['logout'])) {
     session_destroy();
@@ -144,7 +186,13 @@ if (isset($_GET['logout'])) {
 }
 
 if (isset($_SESSION['user'])) {
-    header("Location: dashboard.php");
+    if ($_SESSION['role'] === 'admin') {
+        header("Location: dashboard.php");
+    } else if (hasPlayer($_SESSION['userID'])) {
+        header("Location: playerManagement.php");
+    } else {
+        header("Location: createPlayer.php");
+    }
     exit();
 }
 

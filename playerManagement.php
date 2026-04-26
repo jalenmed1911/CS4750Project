@@ -189,12 +189,12 @@ function bandedRandom0to40() {
             <ul class="nav-links">
                 <?php
                 if ($_SESSION['role'] == 'admin') {
-                    echo "<li><a href='dashboard.php' class='active'>Dashboard</a></li>";
+                    echo "<li><a href='dashboard.php' class='active'>Admin Dashboard</a></li>";
                 } else {
-                    echo "<li><a href='playerManagement.php'>Dashboard</a></li>";
+                    echo "<li><a href='playerManagement.php' class='active'>Dashboard</a></li>";
                 }
                 ?>
-                <li><a href="#">Team Search</a></li>
+                <li><a href="teamSearch.php">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
         </aside>
@@ -204,6 +204,19 @@ function bandedRandom0to40() {
                 <h1>Player Dashboard</h1>
                 <p>Manage your player information.</p>
             </div>
+
+            <?php if (isset($_SESSION['error'])): ?>
+                <div style="background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #fecaca;">
+                    <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['success'])): ?>
+                <div style="background: #ecfdf5; color: #065f46; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #a7f3d0;">
+                    <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                </div>
+            <?php endif; ?>
+
             <section class="activity-section">
 
                 <h2>Player Information</h2>

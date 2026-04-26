@@ -34,7 +34,7 @@ if (!isset($_SESSION['user'])) {
                     echo "<li><a href='playerManagement.php'>Dashboard</a></li>";
                 }
                 ?>
-                <li><a href="#">Team Search</a></li>
+                <li><a href="teamSearch.php">Team Search</a></li>
                 <li><a href="manageOffers.php" class="active">Manage Offers</a></li>
             </ul>
         </aside>
@@ -45,6 +45,18 @@ if (!isset($_SESSION['user'])) {
                 <p>Manage your offers from here.</p>
             </div>
             
+            <?php if (isset($_SESSION['error'])): ?>
+                <div style="background: #fee2e2; color: #991b1b; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #fecaca;">
+                    <?php echo htmlspecialchars($_SESSION['error']); unset($_SESSION['error']); ?>
+                </div>
+            <?php endif; ?>
+
+            <?php if (isset($_SESSION['success'])): ?>
+                <div style="background: #ecfdf5; color: #065f46; padding: 1rem; border-radius: 6px; margin-bottom: 1.5rem; border: 1px solid #a7f3d0;">
+                    <?php echo htmlspecialchars($_SESSION['success']); unset($_SESSION['success']); ?>
+                </div>
+            <?php endif; ?>
+
             <div class="stats-container">
                 <?php
                 $userID = $_SESSION['userID'];
@@ -65,13 +77,15 @@ if (!isset($_SESSION['user'])) {
                     echo "<div class='offer-card'>";
                     echo "<h3>" . "Team: " . htmlspecialchars($team['name']) . "</h3>";
                     echo "<p><strong>Status:</strong> " . htmlspecialchars($offer['status']) . "</p>";
-                    echo "<p><strong>Valuation:</strong> $" . number_format($offer['valuation'], 0, '.', ',') . "</p>";
+                    echo "<p><strong>Offer Amount:</strong> $" . number_format($offer['amount'] * 100, 0, '.', ',') . "</p>";
                     if ($offer['status'] === 'Pending' && !hasTeam($playerID)) {
                     echo "<form method='post' action='index.php'>";
                     echo "<input type='hidden' name='coachID' value='" . $offer['coachID'] . "'>";
+                    echo "<input type='hidden' name='offerID' value='" . $offer['offerID'] . "'>";
                     echo "<button type='submit' name='AcceptOffer' style='margin-top: 20px; background-color: #37e11d; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;'>Accept Offer</button> </form>";
                     echo "<form method='post' action='index.php'>";
                     echo "<input type='hidden' name='coachID' value='" . $offer['coachID'] . "'>";
+                    echo "<input type='hidden' name='offerID' value='" . $offer['offerID'] . "'>";
                     echo "<button type='submit' name='RejectOffer' style='margin-top: 20px; background-color: #e11d48; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;'>Reject Offer</button> </form>";
                     }
                     echo "</div>";
