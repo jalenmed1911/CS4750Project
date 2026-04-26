@@ -8,6 +8,11 @@ if (!isset($_SESSION['user'])) {
 }
 
 $searchQuery = $_GET['search'] ?? '';
+$sort = $_GET['sort'] ?? 'name_asc'; // default sort
+$allowedSorts = ['name_asc', 'name_desc', 'valuation_desc', 'valuation_asc', 'roster_desc'];
+if (!in_array($sort, $allowedSorts, true)) {
+    $sort = 'name_asc';
+}
 $teams = [];
 $isSearch = !empty($searchQuery);
 
@@ -74,6 +79,13 @@ if ($isSearch) {
             <section class="activity-section">
                 <form method="get" action="teamSearch.php" style="margin-bottom: 2rem; display: flex; gap: 10px;">
                     <input type="text" name="search" placeholder="Enter team name..." value="<?php echo htmlspecialchars($searchQuery); ?>" style="flex: 1; padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem;">
+                    <select name="sort" style="padding: 0.75rem; border: 1px solid #ddd; border-radius: 4px; font-size: 1rem; background: white;">
+                        <option value="name_asc" <?php echo $sort === 'name_asc' ? 'selected' : ''; ?>>Team Name (A-Z)</option>
+                        <option value="name_desc" <?php echo $sort === 'name_desc' ? 'selected' : ''; ?>>Team Name (Z-A)</option>
+                        <option value="valuation_desc" <?php echo $sort === 'valuation_desc' ? 'selected' : ''; ?>>Avg Valuation (High-Low)</option>
+                        <option value="valuation_asc" <?php echo $sort === 'valuation_asc' ? 'selected' : ''; ?>>Avg Valuation (Low-High)</option>
+                        <option value="roster_desc" <?php echo $sort === 'roster_desc' ? 'selected' : ''; ?>>Roster Size (High-Low)</option>
+                    </select>
                     <button type="submit" style="background-color: #3498db; color: white; border: none; padding: 0 1.5rem; border-radius: 4px; cursor: pointer; font-weight: 600;">Search</button>
                 </form>
 
