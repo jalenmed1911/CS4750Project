@@ -729,9 +729,28 @@ function removeAdmin($username){
     $stmt->closeCursor();
 }
 
-function teamSearch($team_name){
+function teamSearch($team_name, $sort = 'name_asc'){
     global $db;
-    $query = "SELECT * FROM Team WHERE name LIKE :team_name";
+
+    $sortMap = [
+        'name_asc' => 't.name ASC',
+        'name_desc' => 't.name DESC',
+        'valuation_desc' => 'avg_valuation DESC',
+        'valuation_asc' => 'avg_valuation ASC',
+        'roster_desc' => 'roster_count DESC',
+    ];
+    $orderBy = $sortMap[$sort] ?? $sortMap['name_asc'];
+
+    $query = "SELECT t.teamID, t.name,
+                     COALESCE(AVG(p.valuation), 0) AS avg_valuation,
+                     COUNT(DISTINCT p.playerID) AS roster_count
+              FROM Team t
+              LEFT JOIN Plays_For pf ON t.teamID = pf.teamID
+              LEFT JOIN Player p ON pf.playerID = p.playerID
+              WHERE t.name LIKE :team_name
+              GROUP BY t.teamID, t.name
+              ORDER BY $orderBy";
+
     $stmt = $db->prepare($query);
     $like_team_name = '%' . $team_name . '%';
     $stmt->bindParam(':team_name', $like_team_name);

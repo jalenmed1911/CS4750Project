@@ -15,12 +15,8 @@ if (!in_array($sort, $allowedSorts, true)) {
 }
 $teams = [];
 $isSearch = !empty($searchQuery);
+$teams = teamSearch($searchQuery, $sort);
 
-if ($isSearch) {
-    $teams = teamSearch($searchQuery);
-} else {
-    $teams = getTopTeams(3);
-}
 ?>
 <!DOCTYPE html>
 <html lang="en">
