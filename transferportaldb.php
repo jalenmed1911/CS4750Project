@@ -675,4 +675,55 @@ function getCoachByTeam($teamID){
     return $res;
 }
 
+//Used in updatePlayerStats.php to generate a random percentage increase for stats updates, with a bias towards smaller increases
+function bandedRandom0to40() {
+    $bands = [
+        [0, 5, 1],
+        [6, 10, 3],
+        [11, 15, 6],
+        [16, 20, 10],
+        [21, 25, 10],
+        [26, 30, 6],
+        [31, 35, 3],
+        [36, 40, 1]
+    ];
+
+    $totalWeight = 0;
+    foreach ($bands as $band) {
+        $totalWeight += $band[2];
+    }
+
+    $rand = mt_rand(1, $totalWeight);
+    $current = 0;
+    foreach ($bands as $band) {
+        $current += $band[2];
+        if ($rand <= $current) {
+            return mt_rand($band[0], $band[1]);
+        }
+    }
+    return 20;
+}
+
+//used in updatePlayerStats.php to calculate new stats based on current stats and a position's relevant stats, with a random percentage increase
+function calculateNewStats($stats, $statsMap) {
+    
+    $newStats = [];
+
+    if (!is_array($statsMap) || !is_array($stats)) {
+        return $newStats;
+    }
+
+    foreach (array_keys($statsMap) as $column) {
+
+        if (isset($stats[$column]) && is_numeric($stats[$column])) {
+            $percentage = bandedRandom0to40();
+            $factor = 1 + ($percentage / 100);
+
+            $newStats[$column] = round((float)$stats[$column] * $factor);
+        }
+    }
+
+    return $newStats;
+}
+
 ?>
