@@ -14,7 +14,7 @@ BEGIN
         OLD.touchdowns <> NEW.touchdowns OR
         OLD.interceptions <> NEW.interceptions) THEN
 
-        SET @valuation = FLOOR(NEW.yards *  0.656 + NEW.percentage * 262 + NEW.touchdowns * 26 - NEW.interceptions * 26);
+        SET @valuation = GREATEST(0, FLOOR(NEW.yards *  0.656 + NEW.percentage * 262 + NEW.touchdowns * 26 - NEW.interceptions * 26));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -49,7 +49,7 @@ BEGIN
         OLD.touchdowns <> NEW.touchdowns OR
         OLD.longest <> NEW.longest) THEN
 
-        SET @valuation = FLOOR(NEW.yards + NEW.carries * 4 + NEW.touchdowns * 35 + NEW.longest * 9);
+        SET @valuation = GREATEST(0, FLOOR(NEW.yards + NEW.carries * 4 + NEW.touchdowns * 35 + NEW.longest * 9));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -84,7 +84,7 @@ BEGIN
         OLD.touchdowns <> NEW.touchdowns OR
         OLD.longest <> NEW.longest) THEN
 
-        SET @valuation = FLOOR(NEW.yards + NEW.receptions * 5 + NEW.touchdowns * 40 + NEW.longest * 10);
+        SET @valuation = GREATEST(0, FLOOR(NEW.yards + NEW.receptions * 5 + NEW.touchdowns * 40 + NEW.longest * 10));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -119,7 +119,7 @@ BEGIN
         OLD.total_tackles <> NEW.total_tackles OR
         OLD.tackles_for_loss <> NEW.tackles_for_loss) THEN
 
-        SET @valuation = FLOOR(NEW.sacks *  73 + NEW.solo_tackles * 24 + NEW.total_tackles * 12 + NEW.tackles_for_loss * 48);
+        SET @valuation = GREATEST(0, FLOOR(NEW.sacks *  73 + NEW.solo_tackles * 24 + NEW.total_tackles * 12 + NEW.tackles_for_loss * 48));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -154,7 +154,7 @@ BEGIN
         OLD.passes_defended <> NEW.passes_defended OR
         OLD.interceptions <> NEW.interceptions) THEN
 
-        SET @valuation = FLOOR(NEW.solo_tackles *  30 + NEW.total_tackles * 15 + NEW.interceptions * 119 + NEW.passes_defended * 30);
+        SET @valuation = GREATEST(0, FLOOR(NEW.solo_tackles *  30 + NEW.total_tackles * 15 + NEW.interceptions * 119 + NEW.passes_defended * 30));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -189,7 +189,7 @@ BEGIN
         OLD.longest <> NEW.longest OR
         OLD.points <> NEW.points) THEN
 
-        SET @valuation = FLOOR(NEW.fg_attempted *  3 + NEW.fg_made * 10 + NEW.longest * 10 + NEW.points * 5);
+        SET @valuation = GREATEST(0, FLOOR(NEW.fg_attempted *  3 + NEW.fg_made * 10 + NEW.longest * 10 + NEW.points * 5));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -219,7 +219,7 @@ BEGIN
     DECLARE valuation INT;
 
     
-        SET @valuation = FLOOR(NEW.yards *  0.656 + NEW.percentage * 262 + NEW.touchdowns * 26 - NEW.interceptions * 26);
+        SET @valuation = GREATEST(0, FLOOR(NEW.yards *  0.656 + NEW.percentage * 262 + NEW.touchdowns * 26 - NEW.interceptions * 26));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -249,7 +249,7 @@ BEGIN
 
 
 
-        SET @valuation = FLOOR(NEW.yards + NEW.carries * 4 + NEW.touchdowns * 35 + NEW.longest * 9);
+        SET @valuation = GREATEST(0, FLOOR(NEW.yards + NEW.carries * 4 + NEW.touchdowns * 35 + NEW.longest * 9));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -279,7 +279,7 @@ BEGIN
 
     
 
-        SET @valuation = FLOOR(NEW.yards + NEW.receptions * 5 + NEW.touchdowns * 40 + NEW.longest * 10);
+        SET @valuation = GREATEST(0, FLOOR(NEW.yards + NEW.receptions * 5 + NEW.touchdowns * 40 + NEW.longest * 10));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -309,7 +309,7 @@ BEGIN
 
     
 
-        SET @valuation = FLOOR(NEW.sacks *  73 + NEW.solo_tackles * 24 + NEW.total_tackles * 12 + NEW.tackles_for_loss * 48);
+        SET @valuation = GREATEST(0, FLOOR(NEW.sacks *  73 + NEW.solo_tackles * 24 + NEW.total_tackles * 12 + NEW.tackles_for_loss * 48));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -339,7 +339,7 @@ BEGIN
 
     
 
-        SET @valuation = FLOOR(NEW.solo_tackles *  30 + NEW.total_tackles * 15 + NEW.interceptions * 119 + NEW.passes_defended * 30);
+        SET @valuation = GREATEST(0, FLOOR(NEW.solo_tackles *  30 + NEW.total_tackles * 15 + NEW.interceptions * 119 + NEW.passes_defended * 30));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 
@@ -369,7 +369,7 @@ BEGIN
 
     
 
-        SET @valuation = FLOOR(NEW.fg_attempted *  3 + NEW.fg_made * 10 + NEW.longest * 10 + NEW.points * 5);
+        SET @valuation = GREATEST(0, FLOOR(NEW.fg_attempted *  3 + NEW.fg_made * 10 + NEW.longest * 10 + NEW.points * 5));
 
         SET @stars = 1 + FLOOR( @valuation / 300 );
 

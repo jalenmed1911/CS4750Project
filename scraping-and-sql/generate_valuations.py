@@ -23,7 +23,7 @@ def main():
         f.write("BEGIN;\n\n")
 
         for id, p in player_map.items():
-            valuation = compute_valuation(p)
+            valuation = max(0, compute_valuation(p))
             stars = get_stars(valuation)
             line = f"UPDATE Player SET valuation = {valuation}, stars = {stars} WHERE playerID = {id};\n"
             

@@ -1,6 +1,5 @@
 import json
 import statistics
-import matplotlib.pyplot as plt
 
 """Using the rough valuation results from compute_rough_valuation.py,
    this file checks the final valuation functions (which are scaled
@@ -21,7 +20,7 @@ def compute_valuation(player_dict):
             + 26 * to_int(player_dict.get("TD"))
             - 26 * to_int(player_dict.get("INT"))
         )
-        return int(valuation)
+        return max(0, int(valuation))
 
     elif position == "RB":
         valuation = (
@@ -30,7 +29,7 @@ def compute_valuation(player_dict):
             + 35 * to_int(player_dict.get("TD"))
             + 9 * to_int(player_dict.get("LONG"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     elif position == "WR":
         valuation = (
@@ -39,7 +38,7 @@ def compute_valuation(player_dict):
             + 40 * to_int(player_dict.get("TD"))
             + 10 * to_int(player_dict.get("LONG"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     elif position == "LB":
         valuation = (
@@ -48,7 +47,7 @@ def compute_valuation(player_dict):
             + 12 * to_int(player_dict.get("TOT"))
             + 48 * to_int(player_dict.get("TFL"))
         )
-        return valuation        
+        return max(0, int(valuation))
 
     elif position == "S":
         valuation = (
@@ -57,7 +56,7 @@ def compute_valuation(player_dict):
             + 119 * to_int(player_dict.get("INT"))
             + 30 * to_int(player_dict.get("PD"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     elif position == "PK":
         valuation = (
@@ -66,7 +65,7 @@ def compute_valuation(player_dict):
             + 10 * to_int(player_dict.get("LONG"))
             + 5 * to_int(player_dict.get("PTS"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     return 0
 
@@ -79,6 +78,7 @@ def to_int(value):
 
 
 def main():
+    import matplotlib.pyplot as plt
 
     with open("playerdata.json", "r") as f:
         player_map = json.load(f)

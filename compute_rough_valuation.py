@@ -1,6 +1,5 @@
 import json
 import statistics
-import matplotlib.pyplot as plt
 
 def compute_valuation(player_dict):
     #sum up the four stats for each player based on their position
@@ -16,7 +15,7 @@ def compute_valuation(player_dict):
             + 40 * to_int(player_dict.get("TD"))
             - 40 * to_int(player_dict.get("INT"))
         )
-        return int(valuation)
+        return max(0, int(valuation))
 
     elif position == "RB":
         valuation = (
@@ -25,7 +24,7 @@ def compute_valuation(player_dict):
             + 40 * to_int(player_dict.get("TD"))
             + 10 * to_int(player_dict.get("LONG"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     elif position == "WR":
         valuation = (
@@ -34,7 +33,7 @@ def compute_valuation(player_dict):
             + 40 * to_int(player_dict.get("TD"))
             + 10 * to_int(player_dict.get("LONG"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     elif position == "LB":
         valuation = (
@@ -43,7 +42,7 @@ def compute_valuation(player_dict):
             + 5 * to_int(player_dict.get("TOT"))
             + 20 * to_int(player_dict.get("TFL"))
         )
-        return valuation        
+        return max(0, int(valuation))
 
     elif position == "S":
         valuation = (
@@ -52,7 +51,7 @@ def compute_valuation(player_dict):
             + 40 * to_int(player_dict.get("INT"))
             + 10 * to_int(player_dict.get("PD"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     elif position == "PK":
         valuation = (
@@ -61,7 +60,7 @@ def compute_valuation(player_dict):
             + 20 * to_int(player_dict.get("LONG"))
             + 10 * to_int(player_dict.get("PTS"))
         )
-        return valuation
+        return max(0, int(valuation))
 
     return 0
 
@@ -74,6 +73,7 @@ def to_int(value):
 
 
 def main():
+    import matplotlib.pyplot as plt
 
     with open("playerdata.json", "r") as f:
         player_map = json.load(f)
