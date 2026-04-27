@@ -143,11 +143,11 @@
                             <label for="LB_S">Sacks</label>
                             <input type="number" name="sacks" id="LB_S" min="0" max="10" step="1">
                             
-                            <label for="LB_TFL">Tackles For Loss</label>   
-                            <input type="number" name="tackles_for_loss" id="LB_TFL" min="0" max="5" step="1">
+                            <label for="LB_TFL">Tackles</label>   
+                            <input type="number" name="tackles" id="LB_TFL" min="0" max="5" step="1">
                             
-                            <label for="LB_TT">Total Tackles</label>
-                            <input type="number" name="total_tackles" id="LB_TT" min="0" max="20" step="1">
+                            <label for="LB_TT">Interceptions</label>
+                            <input type="number" name="interceptions" id="LB_TT" min="0" max="20" step="1">
                             
                             
                             <label for="LB_ST">Solo Tackles</label>
