@@ -9,8 +9,8 @@ if ($role === 'admin') {
     $username = 'cdh8zs';
     $password = 'transferportal';
 } else {
-    $username = 'cdh8zs';
-    $password = 'transferportal';
+    $username = 'cdh8zs_a';
+    $password = 'Winter2026';
 }
 
 $host = 'mysql01.cs.virginia.edu';
