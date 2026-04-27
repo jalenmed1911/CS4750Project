@@ -269,7 +269,7 @@ function bandedRandom0to40() {
                 <h2>Player Stats</h2>
                 <div class="stats-container">
                     <button class="circular-button" onclick="randomUpdate()">
-                        <img src="" alt="Refresh Stats">
+                        <p>Refresh Stats</p>
                     </button>
 
 
