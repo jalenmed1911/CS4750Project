@@ -97,14 +97,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Playername']) && isset
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' &&isset($_POST['Create'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Go_To_Create_Account'])) {
     header("Location: createAccount.php");
     exit();
 }
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['CreateAccount'])) {
-    if (validateUsername($_POST['Cusername']) && !isset($_POST['Return'])) {
-        createUser($_POST['Cusername'], $_POST['Cpassword']);
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Account_Creation'])) {
+    if (validateUsername($_POST['Create_Account_Username']) && !isset($_POST['Return_To_Login'])) {
+        createUser($_POST['Create_Account_Username'], $_POST['Create_Account_Password']);
         $_SESSION['success'] = "Account created successfully. Please log in.";
         header("Location: login.php");
     } else {

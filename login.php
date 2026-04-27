@@ -51,7 +51,7 @@ require("transferportaldb.php");
             (ie tells html that the content of the form is done and ready to be sent to the server)
         -->
         <form method="post" action="index.php" enctype="application/x-www-form-urlencoded">
-            <button name="Create" class="create-button">Create Account</button>
+            <button type="submit" name="Go_To_Create_Account" class="create-button">Create Account</button>
         </form>
 
         <!-- Unused code for the most part
