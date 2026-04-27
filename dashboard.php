@@ -49,7 +49,7 @@ if (!isset($_SESSION['user']) || (!isset($_SESSION['role']) || $_SESSION['role']
             
             <div class="stats-container">
                 <div class="stat-card"><h3>Total Players</h3><div class="value"><?php echo totalPlayers();?></div></div>
-                <div class="stat-card"><h3>Open Offers</h3><div class="value"><?php echo totalOffers(); ?></div></div>
+                <div class="stat-card"><h3>Open Offers</h3><div class="value"><?php echo count(getAllOffersDetailed('Pending')); ?></div></div>
                 <div class="stat-card"><h3>Avg Valuation</h3><div class="value"><?php echo number_format(getTotalAverageValuation(), 0, '.', ','); ?></div></div>
             </div>
             
