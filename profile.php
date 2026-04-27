@@ -70,8 +70,14 @@ $playerTeamName = null;
     <div class="dashboard-wrapper">
         <aside class="sidebar">
             <ul class="nav-links">
-                <li><a href="dashboard.php">Dashboard Overview</a></li>
-                <li><a href="playerManagement.php">Player Management</a></li>
+                <?php
+                if ($_SESSION['role'] == 'admin') {
+                    echo "<li><a href='dashboard.php'>Admin Dashboard</a></li>";
+                } else {
+                    echo "<li><a href='playerManagement.php'>Dashboard</a></li>";
+                }
+                ?>
+                
                 <li><a href="teamSearch.php">Team Search</a></li>
                 <li><a href="manageOffers.php">Manage Offers</a></li>
             </ul>
@@ -101,22 +107,7 @@ $playerTeamName = null;
                             <p><strong>Team:</strong> <?php echo htmlspecialchars($playerTeamName['name']); ?></p>
                         <?php endif; ?>
                     </div>
-
-                    <?php if ($playerStats): ?>
-                        <h3>Player Stats (<?php echo htmlspecialchars($playerData['position']); ?>)</h3>
-                        <div class="stat-grid">
-                            <?php foreach ($playerStats as $key => $value): ?>
-                                <?php if ($key !== 'playerID' && $key !== 'position'): ?>
-                                    <div class="stat-item">
-                                        <strong><?php echo htmlspecialchars(ucwords(str_replace('_', ' ', $key))); ?>:</strong> <?php echo htmlspecialchars($value); ?>
-                                    </div>
-                                <?php endif; ?>
-                            <?php endforeach; ?>
-                        </div>
                     <?php endif; ?>
-                <?php else: ?>
-                    <p>You are not currently associated with a player profile. Please contact support if this is incorrect.</p>
-                <?php endif; ?>
             </div>
             <form method="post" action="index.php">
                 <button type="submit" name="Delete" style="margin-top: 20px; background-color: #e11d48; color: white; border: none; padding: 0.6rem 1.2rem; border-radius: 4px; cursor: pointer; font-weight: 600;">Delete Account</button>
