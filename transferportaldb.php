@@ -730,12 +730,32 @@ function calculateNewStats($stats, $statsMap) {
 
     foreach (array_keys($statsMap) as $column) {
 
+        // if (isset($stats[$column]) && is_numeric($stats[$column])) {
+        //     $percentage = bandedRandom0to40();
+        //     $factor = 1 + ($percentage / 100);
+        //     if ($stats[$column] == 0 || $stats[$column] == 1){
+        //     $newStats[$column] = round((float)$stats[$column] + $factor);
+        //     }
+        //     else {
+        //     $newStats[$column] = round((float)$stats[$column] * $factor);
+        //     }
+        // }
+
         if (isset($stats[$column]) && is_numeric($stats[$column])) {
             $percentage = bandedRandom0to40();
-            $factor = 1 + ($percentage / 100);
 
-            $newStats[$column] = round((float)$stats[$column] * $factor);
-        }
+            $value = (float)$stats[$column];
+
+            $scale = 1 / (1 + ($value / 75));  
+
+            $factor = 1 + (($percentage / 100) * $scale);
+
+        if ($value <= 1) {
+            $newStats[$column] = round($value + $factor);
+    }   else {
+            $newStats[$column] = round($value * $factor);
+    }
+    }
     }
 
     return $newStats;
