@@ -67,8 +67,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['Playername']) && isset
     } elseif ($position == 'LB') {
         $stats = [
             'sacks' => $_POST['sacks'],
-            'tackles' => $_POST['tackles'],
-            'interceptions' => $_POST['interceptions'],
+            'tackles_for_loss' => $_POST['tackles_for_loss'],
+            'total_tackles' => $_POST['total_tackles'],
             'solo_tackles' => $_POST['solo_tackles']
         ];
     }
